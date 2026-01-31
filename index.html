@@ -100,16 +100,23 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.4);
         }
 
+        /* แก้ไขส่วน Avatar ให้รองรับรูปภาพ */
         .avatar {
-            width: 60px;
-            height: 60px;
+            width: 65px;
+            height: 65px;
             background: #334155;
             border-radius: 50%;
+            overflow: hidden; /* กันรูปเลยขอบ */
             display: flex;
             justify-content: center;
             align-items: center;
-            font-weight: bold;
-            font-size: 1.2rem;
+            flex-shrink: 0; /* ป้องกันรูปโดนบีบ */
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* ให้รูปเต็มวงกลมพอดี */
         }
 
         .info h3 {
@@ -158,7 +165,9 @@
         <h2 class="section-title founder-title">Founder</h2>
         <div class="grid">
             <div class="card" data-name="Admin One">
-                <div class="avatar" style="border: 2px solid var(--accent-founder);">A1</div>
+                <div class="avatar" style="border: 2px solid var(--accent-founder);">
+                    <img src="https://img2.pic.in.th/LOGO1b0cdedc53dfbe8f.png" alt="Profile">
+                </div>
                 <div class="info">
                     <h3>Admin One <span class="badge bg-founder">Owner</span></h3>
                     <p>ผู้ก่อตั้งและดูแลระบบหลัก</p>
@@ -171,14 +180,18 @@
         <h2 class="section-title leader-title">Leader</h2>
         <div class="grid">
             <div class="card" data-name="Somsak Leader">
-                <div class="avatar" style="border: 2px solid var(--accent-leader);">SL</div>
+                <div class="avatar" style="border: 2px solid var(--accent-leader);">
+                    <img src="https://img2.pic.in.th/LOGO1b0cdedc53dfbe8f.png" alt="Profile">
+                </div>
                 <div class="info">
                     <h3>Somsak Leader <span class="badge bg-leader">Staff</span></h3>
                     <p>ดูแลความสงบเรียบร้อย</p>
                 </div>
             </div>
             <div class="card" data-name="Jane Manager">
-                <div class="avatar" style="border: 2px solid var(--accent-leader);">JM</div>
+                <div class="avatar" style="border: 2px solid var(--accent-leader);">
+                    <img src="https://img2.pic.in.th/LOGO1b0cdedc53dfbe8f.png" alt="Profile">
+                </div>
                 <div class="info">
                     <h3>Jane Manager <span class="badge bg-leader">Staff</span></h3>
                     <p>ฝ่ายกิจกรรมและเวที</p>
@@ -191,14 +204,18 @@
         <h2 class="section-title member-title">Member</h2>
         <div class="grid">
             <div class="card" data-name="John Doe">
-                <div class="avatar">JD</div>
+                <div class="avatar" style="border: 2px solid var(--accent-member);">
+                    <img src="https://img2.pic.in.th/LOGO1b0cdedc53dfbe8f.png" alt="Profile">
+                </div>
                 <div class="info">
                     <h3>John Doe <span class="badge bg-member">User</span></h3>
                     <p>เข้าร่วมเมื่อ: 30 ม.ค. 2026</p>
                 </div>
             </div>
             <div class="card" data-name="Somchai Player">
-                <div class="avatar">SP</div>
+                <div class="avatar" style="border: 2px solid var(--accent-member);">
+                    <img src="https://img2.pic.in.th/LOGO1b0cdedc53dfbe8f.png" alt="Profile">
+                </div>
                 <div class="info">
                     <h3>Somchai Player <span class="badge bg-member">User</span></h3>
                     <p>เข้าร่วมเมื่อ: 25 ม.ค. 2026</p>
@@ -232,12 +249,10 @@
             }
         });
 
-        // ซ่อน Section ถ้าไม่มี Card ด้านในเหลืออยู่เลย
         sections.forEach(section => {
             const visibleCards = section.querySelectorAll('.card[style="display: flex;"]');
             const allCardsInSection = section.querySelectorAll('.card');
             
-            // กรณีพิเศษ: ถ้า value ว่างให้โชว์ทุกอย่าง
             if (value === "") {
                 section.style.display = 'block';
                 allCardsInSection.forEach(c => c.style.display = 'flex');
