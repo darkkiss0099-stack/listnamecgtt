@@ -239,7 +239,7 @@
                     <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
                 </a>
 
-                <a href="https://www.facebook.com/flint.changretta" target="_blank" class="card" data-name="Flint Changretta">
+                <a href="https://www.facebook.com/flint.changretta" class="card" data-name="Flint Changretta">
                     <div class="avatar-wrapper">
                         <div class="avatar" style="border: 2px solid var(--accent-founder);"><img src="https://img2.pic.in.th/Oneless.png"></div>
                         <div class="status-dot online"></div>
@@ -256,18 +256,18 @@
         <div class="group-section" id="leaderSection">
             <h2 class="section-title leader-title">Leader</h2>
             <div class="grid">
-                <a href="https://www.facebook.com/YOUR_LEADER_URL" target="_blank" class="card" data-name="Testui Changretta">
+                <a href="https://www.facebook.com/YOUR_LEADER_URL" target="_blank" class="card" data-name="Coming Soon Leader">
                     <div class="avatar-wrapper">
                         <div class="avatar" style="border: 2px solid var(--accent-leader);"><img src="https://img2.pic.in.th/Oneless.png"></div>
                         <div class="status-dot online"></div>
                     </div>
                     <div class="info">
-                        <h3>Testui Changretta</h3>
+                        <h3>#</h3>
                         <span class="badge bg-leader">LEADER</span>
                     </div>
                     <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
                 </a>
-                </div>
+            </div>
         </div>
 
         <div class="group-section" id="memberSection">
@@ -285,7 +285,10 @@
                     <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
                 </a>
 
-                <a href="https://www.facebook.com/xa.cu.bi/" target="_blank" class="card" data-name="Kati Changretta">
+        <div class="group-section" id="memberSection">
+            <h2 class="section-title member-title">Member</h2>
+            <div class="grid">
+                <a href="https://www.facebook.com/xa.cu.bi/" class="card" data-name="Kati Changretta">
                     <div class="avatar-wrapper">
                         <div class="avatar" style="border: 2px solid var(--accent-member);"><img src="https://img2.pic.in.th/Oneless.png"></div>
                         <div class="status-dot online"></div>
@@ -297,6 +300,9 @@
                     <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
                 </a>
 
+        <div class="group-section" id="memberSection">
+            <h2 class="section-title member-title">Member</h2>
+            <div class="grid">
                 <a href="https://www.facebook.com/minyu.less" target="_blank" class="card" data-name="Minyu Changretta">
                     <div class="avatar-wrapper">
                         <div class="avatar" style="border: 2px solid var(--accent-member);"><img src="https://img2.pic.in.th/Oneless.png"></div>
@@ -308,8 +314,7 @@
                     </div>
                     <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
                 </a>
-
-                <a href="https://www.facebook.com/share/1GYbVDfTr1/?mibextid=wwXIfr" target="_blank" class="card" data-name="Nel Changretta">
+                <a href="https://www.facebook.com/share/1GYbVDfTr1/?mibextid=wwXIfr"_blank" class="card" data-name="Nel Changretta">
                     <div class="avatar-wrapper">
                         <div class="avatar" style="border: 2px solid var(--accent-member);"><img src="https://img2.pic.in.th/Oneless.png"></div>
                         <div class="status-dot online"></div>
@@ -320,8 +325,7 @@
                     </div>
                     <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
                 </a>
-
-                <a href="https://www.facebook.com/share/16oRk5yctu/?mibextid=wwXIfr" target="_blank" class="card" data-name="Monchhichi Changretta">
+                <a href="https://www.facebook.com/share/16oRk5yctu/?mibextid=wwXIfr"_blank" class="card" data-name="Monchhichi Changretta">
                     <div class="avatar-wrapper">
                         <div class="avatar" style="border: 2px solid var(--accent-member);"><img src="https://img2.pic.in.th/Oneless.png"></div>
                         <div class="status-dot online"></div>
@@ -367,8 +371,12 @@
             });
 
             sections.forEach(sec => {
-                const visibleCards = sec.querySelectorAll('.card:not([style*="display: none"])');
-                sec.style.display = (val !== "" && visibleCards.length === 0) ? "none" : "block";
+                const visibleCards = sec.querySelectorAll('.card[style="display: flex"]');
+                if (val !== "" && visibleCards.length === 0) {
+                    sec.style.display = "none";
+                } else {
+                    sec.style.display = "block";
+                }
             });
         });
 
