@@ -3,39 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHANGRETTA MEMBER</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>CHANGRETTA MEMBER | OFFICIAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --bg-body: #0f172a;
-            --bg-card: #1e293b;
+            --bg-body: #0a0a0a;
+            --bg-card: rgba(30, 41, 59, 0.7);
             --accent-founder: #f59e0b;
             --accent-leader: #3b82f6;
             --accent-member: #94a3b8;
             --text-main: #f8fafc;
             --status-online: #22c55e;
-            --status-offline: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Kanit', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
-            margin: 0;
-            padding: 40px 20px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        /* พื้นหลังแบบภาพซ้อน Overlay */
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)),
+                        url('https://img2.pic.in.th/475638765_916266083879572_6694404597216444166_n.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
         }
 
         .container {
             width: 95%;
-            max-width: 1200px;
+            max-width: 1100px;
+            z-index: 1;
         }
 
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+        }
+
+        header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #fff, #888, #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
         }
 
         .search-container {
@@ -43,29 +77,32 @@
             max-width: 500px;
             margin-left: auto;
             margin-right: auto;
+            position: relative;
         }
 
         #searchInput {
             width: 100%;
             padding: 15px 25px;
             border-radius: 30px;
-            border: none;
-            background: var(--bg-card);
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.05);
             color: white;
             font-size: 1.1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            outline: 2px solid transparent;
+            backdrop-filter: blur(10px);
+            outline: none;
             transition: 0.3s;
+            text-align: center;
         }
 
-        #searchInput:focus { outline: 2px solid var(--accent-leader); }
+        #searchInput:focus { border-color: var(--accent-leader); background: rgba(255, 255, 255, 0.1); }
 
         .section-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
             padding-left: 15px;
-            border-left: 5px solid;
-            text-transform: uppercase;
+            border-left: 4px solid;
+            letter-spacing: 3px;
         }
 
         .founder-title { border-color: var(--accent-founder); color: var(--accent-founder); }
@@ -80,245 +117,208 @@
         }
 
         @media (max-width: 992px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+        @media (max-width: 650px) { .grid { grid-template-columns: 1fr; } }
 
         .card {
             background: var(--bg-card);
             border-radius: 15px;
-            padding: 15px 20px;
+            padding: 18px;
             display: flex;
             align-items: center;
             gap: 15px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+            border: 1px solid var(--border);
             text-decoration: none;
             color: inherit;
-            cursor: pointer;
-            width: 100%;
-            box-sizing: border-box;
-            position: relative; /* สำหรับจัดตำแหน่งโลโก้ */
+            backdrop-filter: blur(10px);
+            position: relative;
         }
 
         .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.5);
-            background: #232f46;
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
         }
 
-        .avatar-wrapper {
-            position: relative;
-            flex-shrink: 0;
-        }
-
+        .avatar-wrapper { position: relative; flex-shrink: 0; }
         .avatar {
-            width: 60px;
-            height: 60px;
-            background: #334155;
-            border-radius: 50%;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 60px; height: 60px;
+            border-radius: 50%; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
         }
-
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
         .status-dot {
-            position: absolute;
-            bottom: 2px;
-            right: 2px;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            border: 2px solid var(--bg-card);
+            position: absolute; bottom: 2px; right: 2px;
+            width: 14px; height: 14px; border-radius: 50%;
+            border: 2px solid #1e293b;
         }
+        .online { background: var(--status-online); box-shadow: 0 0 8px var(--status-online); }
 
-        .online { background-color: var(--status-online); box-shadow: 0 0 8px var(--status-online); }
-
-        .info {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            overflow: hidden;
-        }
-
-        .info h3 {
-            margin: 0;
-            font-size: 1.05rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding-right: 25px; /* เผื่อที่ให้โลโก้ FB */
-        }
-
+        .info { flex-grow: 1; overflow: hidden; }
+        .info h3 { font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+        
         .badge {
-            font-size: 0.75rem;
-            padding: 2px 12px;
-            border-radius: 6px;
-            display: inline-block;
-            width: fit-content;
-            font-weight: 600;
-            text-transform: uppercase;
+            font-size: 0.7rem; padding: 2px 10px; border-radius: 4px;
+            font-weight: bold; text-transform: uppercase;
+        }
+        .bg-founder { background: var(--accent-founder); color: #000; }
+        .bg-leader { background: var(--accent-leader); color: #fff; }
+        .bg-member { background: var(--accent-member); color: #000; }
+
+        .fb-logo { width: 22px; height: 22px; opacity: 0.3; transition: 0.3s; }
+        .card:hover .fb-logo { opacity: 1; transform: scale(1.1); }
+
+        /* --- Music Player Bar --- */
+        #music-container { position: fixed; bottom: 30px; right: 30px; z-index: 100; }
+        .player-bar { 
+            display: flex; align-items: center; background: rgba(0, 0, 0, 0.9); 
+            border: 1px solid var(--border); padding: 10px 15px; gap: 12px; 
+            backdrop-filter: blur(10px); border-radius: 4px;
+        }
+        .album-art { width: 40px; height: 40px; border: 1px solid #444; }
+        .song-info h4 { font-size: 0.75rem; color: #fff; }
+        .song-info p { font-size: 0.6rem; color: #888; }
+        .btn-toggle { 
+            background: #fff; color: #000; border: none; width: 28px; height: 28px; 
+            font-weight: bold; cursor: pointer; border-radius: 2px;
         }
 
-        .bg-founder { background: var(--accent-founder); color: black; }
-        .bg-leader { background: var(--accent-leader); color: white; }
-        .bg-member { background: var(--accent-member); color: black; }
-
-        /* FB Logo Style */
-        .fb-logo {
-            width: 24px;
-            height: 24px;
-            opacity: 0.4;
-            transition: 0.3s;
-            flex-shrink: 0;
-        }
-
-        .card:hover .fb-logo {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-
-        .no-result { display: none; text-align: center; opacity: 0.5; margin-top: 50px; }
+        .footer { margin-top: 50px; font-size: 0.8rem; color: #666; text-align: center; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>CHANGRETTA MEMBER</h1>
-        <p>REAL MEMBER 2026</p>
-    </header>
+    <div class="bg-overlay"></div>
 
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="ค้นหาชื่อ หรือตำแหน่ง...">
-    </div>
+    <div class="container">
+        <header>
+            <h1>CHANGRETTA</h1>
+            <p style="letter-spacing: 5px; color: #888;">MEMBER DIRECTORY 2026</p>
+        </header>
 
-    <div class="group-section" id="founderSection">
-        <h2 class="section-title founder-title">Founder</h2>
-        <div class="grid">
-            <a href="https://www.facebook.com/captain.changretta" target="_blank" class="card" data-name="Captainn Changretta">
-                <div class="avatar-wrapper">
-                    <div class="avatar" style="border: 2px solid var(--accent-founder);">
-                        <img src="https://img2.pic.in.th/Oneless.png" alt="Profile">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="SEARCH MEMBER NAME...">
+        </div>
+
+        <div class="group-section">
+            <h2 class="section-title founder-title">Founder</h2>
+            <div class="grid">
+                <a href="https://www.facebook.com/captain.changretta" target="_blank" class="card" data-name="Captainn Changretta">
+                    <div class="avatar-wrapper">
+                        <div class="avatar" style="border: 2px solid var(--accent-founder);"><img src="https://img2.pic.in.th/Oneless.png"></div>
+                        <div class="status-dot online"></div>
                     </div>
-                    <div class="status-dot online"></div>
-                </div>
-                <div class="info">
-                    <h3>Captainn Changretta</h3>
-                    <span class="badge bg-founder">Owner</span>
-                </div>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo" alt="FB">
-            </a>
-
-            <a href="https://www.facebook.com/mikey.changretta" target="_blank" class="card" data-name="Mikey Changretta">
-                <div class="avatar-wrapper">
-                    <div class="avatar" style="border: 2px solid var(--accent-founder);">
-                        <img src="https://img2.pic.in.th/Oneless.png" alt="Profile">
+                    <div class="info">
+                        <h3>Captainn Changretta</h3>
+                        <span class="badge bg-founder">Owner</span>
                     </div>
-                    <div class="status-dot online"></div>
-                </div>
-                <div class="info">
-                    <h3>Mikey Changretta</h3>
-                    <span class="badge bg-founder">Owner</span>
-                </div>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo" alt="FB">
-            </a>
-
-            <a href="https://www.facebook.com/NitroRairak" target="_blank" class="card" data-name="Nitro Changretta">
-                <div class="avatar-wrapper">
-                    <div class="avatar" style="border: 2px solid var(--accent-founder);">
-                        <img src="https://img2.pic.in.th/Oneless.png" alt="Profile">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
+                </a>
+                <a href="https://www.facebook.com/mikey.changretta" target="_blank" class="card" data-name="Mikey Changretta">
+                    <div class="avatar-wrapper">
+                        <div class="avatar" style="border: 2px solid var(--accent-founder);"><img src="https://img2.pic.in.th/Oneless.png"></div>
+                        <div class="status-dot online"></div>
                     </div>
-                    <div class="status-dot online"></div>
-                </div>
-                <div class="info">
-                    <h3>Nitro Changretta</h3>
-                    <span class="badge bg-founder">Owner</span>
-                </div>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo" alt="FB">
-            </a>
+                    <div class="info">
+                        <h3>Mikey Changretta</h3>
+                        <span class="badge bg-founder">Owner</span>
+                    </div>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
+                </a>
+                <a href="https://www.facebook.com/NitroRairak" target="_blank" class="card" data-name="Nitro Changretta">
+                    <div class="avatar-wrapper">
+                        <div class="avatar" style="border: 2px solid var(--accent-founder);"><img src="https://img2.pic.in.th/Oneless.png"></div>
+                        <div class="status-dot online"></div>
+                    </div>
+                    <div class="info">
+                        <h3>Nitro Changretta</h3>
+                        <span class="badge bg-founder">Owner</span>
+                    </div>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
+                </a>
+            </div>
+        </div>
+
+        <div class="group-section">
+            <h2 class="section-title leader-title">Leader</h2>
+            <div class="grid">
+                <a href="#" class="card" data-name="Coming Soon">
+                    <div class="avatar-wrapper">
+                        <div class="avatar" style="border: 2px solid var(--accent-leader);"><img src="https://img2.pic.in.th/Oneless.png"></div>
+                        <div class="status-dot online"></div>
+                    </div>
+                    <div class="info">
+                        <h3>COMING SOON...</h3>
+                        <span class="badge bg-leader">LEADER</span>
+                    </div>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
+                </a>
+            </div>
         </div>
     </div>
 
-    <div class="group-section" id="leaderSection">
-        <h2 class="section-title leader-title">Leader</h2>
-        <div class="grid">
-            <a href="#" target="_blank" class="card" data-name="Coming Soon Leader">
-                <div class="avatar-wrapper">
-                    <div class="avatar" style="border: 2px solid var(--accent-leader);">
-                        <img src="https://img2.pic.in.th/Oneless.png" alt="Profile">
-                    </div>
-                    <div class="status-dot online"></div>
-                </div>
-                <div class="info">
-                    <h3>COMING SOON...</h3>
-                    <span class="badge bg-leader">LEADER</span>
-                </div>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo" alt="FB">
-            </a>
+    <div id="music-container">
+        <div class="player-bar">
+            <img src="https://i.ytimg.com/vi/xy3AcmW0lrQ/maxresdefault.jpg" class="album-art">
+            <div class="song-info">
+                <h4>End of Beginning</h4>
+                <p>Djo // AUDIO_SYSTEM</p>
+            </div>
+            <button class="btn-toggle" onclick="togglePlayPause()" id="playBtn">||</button>
         </div>
     </div>
 
-    <div class="group-section" id="memberSection">
-        <h2 class="section-title member-title">Member</h2>
-        <div class="grid">
-            <a href="#" target="_blank" class="card" data-name="Coming Soon Member">
-                <div class="avatar-wrapper">
-                    <div class="avatar" style="border: 2px solid var(--accent-member);">
-                        <img src="https://img2.pic.in.th/Oneless.png" alt="Profile">
-                    </div>
-                    <div class="status-dot online"></div>
-                </div>
-                <div class="info">
-                    <h3>COMING SOON...</h3>
-                    <span class="badge bg-member">User</span>
-                </div>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo" alt="FB">
-            </a>
-        </div>
-    </div>
+    <div id="yt-player" style="display:none;"></div>
 
-    <div id="noResult" class="no-result">
-        <h3>ไม่พบรายชื่อที่คุณค้นหา...</h3>
-    </div>
-</div>
+    <footer class="footer">
+        © 2026 CHANGRETTA OFFICIAL | Designed by Oneless
+    </footer>
 
-<script>
-    const searchInput = document.getElementById('searchInput');
-    const cards = document.querySelectorAll('.card');
-    const sections = document.querySelectorAll('.group-section');
-    const noResult = document.getElementById('noResult');
+    <script>
+        // Search Filter
+        const searchInput = document.getElementById('searchInput');
+        const cards = document.querySelectorAll('.card');
 
-    searchInput.addEventListener('input', (e) => {
-        const value = e.target.value.toLowerCase();
-        let hasVisibleCard = false;
-
-        cards.forEach(card => {
-            const name = card.getAttribute('data-name').toLowerCase();
-            if (name.includes(value)) {
-                card.style.display = 'flex';
-                hasVisibleCard = true;
-            } else {
-                card.style.display = 'none';
-            }
+        searchInput.addEventListener('input', (e) => {
+            const val = e.target.value.toLowerCase();
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name').toLowerCase();
+                card.style.display = name.includes(val) ? "flex" : "none";
+            });
         });
 
-        sections.forEach(section => {
-            const visibleCards = section.querySelectorAll('.card[style*="display: flex"]');
-            if (value === "") {
-                section.style.display = 'block';
-            } else if (visibleCards.length === 0) {
-                section.style.display = 'none';
+        // YouTube Player API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('yt-player', {
+                height: '0', width: '0',
+                videoId: 'xy3AcmW0lrQ', // ID เพลง
+                playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': 'xy3AcmW0lrQ' },
+                events: { 'onReady': (e) => { e.target.setVolume(30); }}
+            });
+        }
+
+        function togglePlayPause() {
+            const btn = document.getElementById('playBtn');
+            if (player.getPlayerState() === 1) {
+                player.pauseVideo();
+                btn.innerText = "▶";
             } else {
-                section.style.display = 'block';
+                player.playVideo();
+                btn.innerText = "||";
             }
-        });
+        }
 
-        noResult.style.display = hasVisibleCard ? 'none' : 'block';
-    });
-</script>
-
+        // คลิกครั้งแรกเพื่อเล่นเพลง (เงื่อนไขของ Browser)
+        document.body.addEventListener('click', () => { 
+            if(player && player.playVideo) player.playVideo(); 
+        }, { once: true });
+    </script>
 </body>
 </html>
