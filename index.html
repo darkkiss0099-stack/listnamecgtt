@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHANGRETTA MEMBER - Single Line Edition</title>
+    <title>CHANGRETTA MEMBER - Flexible Card</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -26,8 +26,15 @@
             align-items: center;
         }
 
-        .container { max-width: 1000px; width: 100%; }
-        header { text-align: center; margin-bottom: 40px; }
+        .container {
+            width: 95%;
+            max-width: 1200px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
 
         .search-container {
             margin-bottom: 50px;
@@ -63,9 +70,10 @@
         .leader-title { border-color: var(--accent-leader); color: var(--accent-leader); }
         .member-title { border-color: var(--accent-member); color: var(--accent-member); }
 
+        /* ปรับ Grid ให้ยืดหยุ่นตามความกว้างเนื้อหา */
         .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
             gap: 20px;
             margin-bottom: 60px;
         }
@@ -73,7 +81,7 @@
         .card {
             background: var(--bg-card);
             border-radius: 15px;
-            padding: 20px;
+            padding: 15px 25px;
             display: flex;
             align-items: center;
             gap: 15px;
@@ -82,7 +90,11 @@
             text-decoration: none;
             color: inherit;
             cursor: pointer;
-            overflow: hidden; /* ป้องกันเนื้อหาล้น */
+            
+            /* จุดสำคัญ: ให้กว้างตามเนื้อหาแต่ไม่เกินหน้าจอ */
+            width: fit-content; 
+            min-width: 250px;
+            max-width: 100%;
         }
 
         .card:hover {
@@ -92,8 +104,8 @@
         }
 
         .avatar {
-            width: 65px;
-            height: 65px;
+            width: 60px;
+            height: 60px;
             background: #334155;
             border-radius: 50%;
             overflow: hidden;
@@ -106,35 +118,28 @@
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
         .info {
-            overflow: hidden; /* จำเป็นสำหรับการทำจุดไข่ปลา */
-            width: 100%;
+            flex-grow: 1;
+            white-space: nowrap; /* ให้ชื่อและข้อความอยู่บรรทัดเดียวเสมอ */
         }
 
-        /* ปรับแต่งให้ชื่ออยู่บรรทัดเดียว */
         .info h3 {
             margin: 0;
-            font-size: 1.1rem;
-            white-space: nowrap;      /* ห้ามขึ้นบรรทัดใหม่ */
-            overflow: hidden;         /* ซ่อนส่วนที่เกิน */
-            text-overflow: ellipsis;  /* แสดงจุดไข่ปลา (...) */
-            display: block;           /* เปลี่ยนจาก flex เป็น block เพื่อให้ ellipsis ทำงาน */
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
         }
 
         .info p {
-            margin: 5px 0 0;
+            margin: 3px 0 0;
             font-size: 0.85rem;
             opacity: 0.7;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         .badge {
             font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 10px;
-            vertical-align: middle;
-            margin-left: 5px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            margin-left: 10px;
             display: inline-block;
         }
 
@@ -150,7 +155,7 @@
 <div class="container">
     <header>
         <h1>CHANGRETTA MEMBER</h1>
-        <p>รายชื่อสมาชิก (คลิกเพื่อดูโปรไฟล์)</p>
+        <p>รายชื่อสมาชิก (กรอบจะขยายตามความยาวชื่ออัตโนมัติ)</p>
     </header>
 
     <div class="search-container">
@@ -175,13 +180,13 @@
     <div class="group-section" id="leaderSection">
         <h2 class="section-title leader-title">Leader</h2>
         <div class="grid">
-            <a href="#" target="_blank" class="card" data-name="Somsak Leader">
+            <a href="#" target="_blank" class="card" data-name="Somsak Leader Very Long Name Test">
                 <div class="avatar" style="border: 2px solid var(--accent-leader);">
                     <img src="https://img2.pic.in.th/LOGO1b0cdedc53dfbe8f.png" alt="Profile">
                 </div>
                 <div class="info">
-                    <h3>Somsak Leader <span class="badge bg-leader">Staff</span></h3>
-                    <p>ดูแลความสงบเรียบร้อย</p>
+                    <h3>Somsak Leader Very Long Name Test <span class="badge bg-leader">Staff</span></h3>
+                    <p>ดูแลความสงบเรียบร้อยภายในพื้นที่</p>
                 </div>
             </a>
         </div>
@@ -190,12 +195,12 @@
     <div class="group-section" id="memberSection">
         <h2 class="section-title member-title">Member</h2>
         <div class="grid">
-            <a href="#" target="_blank" class="card" data-name="John Doe Member">
+            <a href="#" target="_blank" class="card" data-name="John Doe">
                 <div class="avatar" style="border: 2px solid var(--accent-member);">
                     <img src="https://img2.pic.in.th/LOGO1b0cdedc53dfbe8f.png" alt="Profile">
                 </div>
                 <div class="info">
-                    <h3>John Doe Member <span class="badge bg-member">User</span></h3>
+                    <h3>John Doe <span class="badge bg-member">User</span></h3>
                     <p>เข้าร่วมเมื่อ: 30 ม.ค. 2026</p>
                 </div>
             </a>
