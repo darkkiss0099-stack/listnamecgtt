@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member List - Modern UI</title>
+    <title>CHANGRETTA MEMBER - Facebook Link</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -83,7 +83,7 @@
             margin-bottom: 60px;
         }
 
-        /* Card Styling */
+        /* Card Styling - แก้ไขให้เป็น Link */
         .card {
             background: var(--bg-card);
             border-radius: 15px;
@@ -91,37 +91,43 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s ease;
             border: 1px solid rgba(255,255,255,0.05);
+            text-decoration: none; /* ลบเส้นใต้ */
+            color: inherit; /* ใช้สีเดิม */
+            cursor: pointer;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.5);
+            background: #232f46;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* แก้ไขส่วน Avatar ให้รองรับรูปภาพ */
         .avatar {
             width: 65px;
             height: 65px;
             background: #334155;
             border-radius: 50%;
-            overflow: hidden; /* กันรูปเลยขอบ */
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-shrink: 0; /* ป้องกันรูปโดนบีบ */
+            flex-shrink: 0;
         }
 
         .avatar img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* ให้รูปเต็มวงกลมพอดี */
+            object-fit: cover;
         }
 
         .info h3 {
             margin: 0;
             font-size: 1.1rem;
+            display: flex;
+            align-items: center;
         }
 
         .info p {
@@ -130,7 +136,6 @@
             opacity: 0.7;
         }
 
-        /* Status Badges */
         .badge {
             font-size: 0.7rem;
             padding: 2px 8px;
@@ -153,8 +158,8 @@
 
 <div class="container">
     <header>
-        <h1>DEDKORDONGG Community</h1>
-        <p>รายชื่อสมาชิกทั้งหมดในระบบ</p>
+        <h1>CHANGRETTA MEMBER</h1>
+        <p>คลิกที่การ์ดเพื่อเปิด Facebook โปรไฟล์</p>
     </header>
 
     <div class="search-container">
@@ -164,22 +169,22 @@
     <div class="group-section" id="founderSection">
         <h2 class="section-title founder-title">Founder</h2>
         <div class="grid">
-            <div class="card" data-name="Admin One">
+            <a href="#" target="_blank" class="card" data-name="Captainn Changretta">
                 <div class="avatar" style="border: 2px solid var(--accent-founder);">
                     <img src="https://img2.pic.in.th/LOGO1b0cdedc53dfbe8f.png" alt="Profile">
                 </div>
                 <div class="info">
-                    <h3>Admin One <span class="badge bg-founder">Owner</span></h3>
+                    <h3>Captainn Changretta <span class="badge bg-founder">Owner</span></h3>
                     <p>ผู้ก่อตั้งและดูแลระบบหลัก</p>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 
     <div class="group-section" id="leaderSection">
         <h2 class="section-title leader-title">Leader</h2>
         <div class="grid">
-            <div class="card" data-name="Somsak Leader">
+            <a href="#" target="_blank" class="card" data-name="Somsak Leader">
                 <div class="avatar" style="border: 2px solid var(--accent-leader);">
                     <img src="https://img2.pic.in.th/LOGO1b0cdedc53dfbe8f.png" alt="Profile">
                 </div>
@@ -187,8 +192,8 @@
                     <h3>Somsak Leader <span class="badge bg-leader">Staff</span></h3>
                     <p>ดูแลความสงบเรียบร้อย</p>
                 </div>
-            </div>
-            <div class="card" data-name="Jane Manager">
+            </a>
+            <a href="#" target="_blank" class="card" data-name="Jane Manager">
                 <div class="avatar" style="border: 2px solid var(--accent-leader);">
                     <img src="https://img2.pic.in.th/LOGO1b0cdedc53dfbe8f.png" alt="Profile">
                 </div>
@@ -196,14 +201,14 @@
                     <h3>Jane Manager <span class="badge bg-leader">Staff</span></h3>
                     <p>ฝ่ายกิจกรรมและเวที</p>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 
     <div class="group-section" id="memberSection">
         <h2 class="section-title member-title">Member</h2>
         <div class="grid">
-            <div class="card" data-name="John Doe">
+            <a href="#" target="_blank" class="card" data-name="John Doe">
                 <div class="avatar" style="border: 2px solid var(--accent-member);">
                     <img src="https://img2.pic.in.th/LOGO1b0cdedc53dfbe8f.png" alt="Profile">
                 </div>
@@ -211,8 +216,8 @@
                     <h3>John Doe <span class="badge bg-member">User</span></h3>
                     <p>เข้าร่วมเมื่อ: 30 ม.ค. 2026</p>
                 </div>
-            </div>
-            <div class="card" data-name="Somchai Player">
+            </a>
+            <a href="#" target="_blank" class="card" data-name="Somchai Player">
                 <div class="avatar" style="border: 2px solid var(--accent-member);">
                     <img src="https://img2.pic.in.th/LOGO1b0cdedc53dfbe8f.png" alt="Profile">
                 </div>
@@ -220,7 +225,7 @@
                     <h3>Somchai Player <span class="badge bg-member">User</span></h3>
                     <p>เข้าร่วมเมื่อ: 25 ม.ค. 2026</p>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 
@@ -250,13 +255,9 @@
         });
 
         sections.forEach(section => {
-            const visibleCards = section.querySelectorAll('.card[style="display: flex;"]');
-            const allCardsInSection = section.querySelectorAll('.card');
-            
+            const visibleCards = section.querySelectorAll('.card[style*="display: flex"]');
             if (value === "") {
                 section.style.display = 'block';
-                allCardsInSection.forEach(c => c.style.display = 'flex');
-                hasVisibleCard = true;
             } else if (visibleCards.length === 0) {
                 section.style.display = 'none';
             } else {
