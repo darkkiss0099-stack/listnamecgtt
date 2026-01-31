@@ -72,7 +72,6 @@
         .leader-title { border-color: var(--accent-leader); color: var(--accent-leader); }
         .member-title { border-color: var(--accent-member); color: var(--accent-member); }
 
-        /* จัด Grid เป็น 3 คนต่อบรรทัด */
         .grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -81,7 +80,7 @@
         }
 
         @media (max-width: 992px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
 
         .card {
             background: var(--bg-card);
@@ -97,6 +96,7 @@
             cursor: pointer;
             width: 100%;
             box-sizing: border-box;
+            position: relative; /* สำหรับจัดตำแหน่งโลโก้ */
         }
 
         .card:hover {
@@ -133,9 +133,7 @@
             border: 2px solid var(--bg-card);
         }
 
-        /* ทุกคนออนไลน์ */
         .online { background-color: var(--status-online); box-shadow: 0 0 8px var(--status-online); }
-        .offline { background-color: var(--status-offline); }
 
         .info {
             flex-grow: 1;
@@ -151,6 +149,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            padding-right: 25px; /* เผื่อที่ให้โลโก้ FB */
         }
 
         .badge {
@@ -166,6 +165,20 @@
         .bg-founder { background: var(--accent-founder); color: black; }
         .bg-leader { background: var(--accent-leader); color: white; }
         .bg-member { background: var(--accent-member); color: black; }
+
+        /* FB Logo Style */
+        .fb-logo {
+            width: 24px;
+            height: 24px;
+            opacity: 0.4;
+            transition: 0.3s;
+            flex-shrink: 0;
+        }
+
+        .card:hover .fb-logo {
+            opacity: 1;
+            transform: scale(1.1);
+        }
 
         .no-result { display: none; text-align: center; opacity: 0.5; margin-top: 50px; }
     </style>
@@ -196,6 +209,7 @@
                     <h3>Captainn Changretta</h3>
                     <span class="badge bg-founder">Owner</span>
                 </div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo" alt="FB">
             </a>
 
             <a href="https://www.facebook.com/mikey.changretta" target="_blank" class="card" data-name="Mikey Changretta">
@@ -209,6 +223,7 @@
                     <h3>Mikey Changretta</h3>
                     <span class="badge bg-founder">Owner</span>
                 </div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo" alt="FB">
             </a>
 
             <a href="https://www.facebook.com/NitroRairak" target="_blank" class="card" data-name="Nitro Changretta">
@@ -222,6 +237,7 @@
                     <h3>Nitro Changretta</h3>
                     <span class="badge bg-founder">Owner</span>
                 </div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo" alt="FB">
             </a>
         </div>
     </div>
@@ -240,6 +256,7 @@
                     <h3>COMING SOON...</h3>
                     <span class="badge bg-leader">LEADER</span>
                 </div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo" alt="FB">
             </a>
         </div>
     </div>
@@ -258,6 +275,7 @@
                     <h3>COMING SOON...</h3>
                     <span class="badge bg-member">User</span>
                 </div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo" alt="FB">
             </a>
         </div>
     </div>
