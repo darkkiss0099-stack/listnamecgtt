@@ -214,6 +214,7 @@
                     </div>
                     <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
                 </a>
+
                 <a href="https://www.facebook.com/mikey.changretta" target="_blank" class="card" data-name="Mikey Changretta">
                     <div class="avatar-wrapper">
                         <div class="avatar" style="border: 2px solid var(--accent-founder);"><img src="https://img2.pic.in.th/Oneless.png"></div>
@@ -225,6 +226,7 @@
                     </div>
                     <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
                 </a>
+
                 <a href="https://www.facebook.com/NitroRairak" target="_blank" class="card" data-name="Nitro Changretta">
                     <div class="avatar-wrapper">
                         <div class="avatar" style="border: 2px solid var(--accent-founder);"><img src="https://img2.pic.in.th/Oneless.png"></div>
@@ -242,7 +244,7 @@
         <div class="group-section" id="leaderSection">
             <h2 class="section-title leader-title">Leader</h2>
             <div class="grid">
-                <a href="#" class="card" data-name="Coming Soon Leader">
+                <a href="https://www.facebook.com/YOUR_LEADER_URL" target="_blank" class="card" data-name="Coming Soon Leader">
                     <div class="avatar-wrapper">
                         <div class="avatar" style="border: 2px solid var(--accent-leader);"><img src="https://img2.pic.in.th/Oneless.png"></div>
                         <div class="status-dot online"></div>
@@ -259,13 +261,13 @@
         <div class="group-section" id="memberSection">
             <h2 class="section-title member-title">Member</h2>
             <div class="grid">
-                <a href="#" class="card" data-name="Coming Soon Member">
+                <a href="https://www.facebook.com/YOUR_MEMBER_URL" target="_blank" class="card" data-name="Oshi Changretta">
                     <div class="avatar-wrapper">
                         <div class="avatar" style="border: 2px solid var(--accent-member);"><img src="https://img2.pic.in.th/Oneless.png"></div>
                         <div class="status-dot online"></div>
                     </div>
                     <div class="info">
-                <a href="https://www.facebook.com/tsumaki.tsunaji.342"_blank" class="card" data-name="Oshi Changretta">
+                        <h3>Oshi Changretta</h3>
                         <span class="badge bg-member">MEMBER</span>
                     </div>
                     <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
@@ -304,10 +306,8 @@
                 card.style.display = name.includes(val) ? "flex" : "none";
             });
 
-            // ซ่อน Section ถ้าไม่มี Card ด้านใน
             sections.forEach(sec => {
                 const visibleCards = sec.querySelectorAll('.card[style="display: flex"]');
-                const allCards = sec.querySelectorAll('.card');
                 if (val !== "" && visibleCards.length === 0) {
                     sec.style.display = "none";
                 } else {
