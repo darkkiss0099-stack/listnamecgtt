@@ -167,7 +167,30 @@
         .bg-leader { background: var(--accent-leader); color: #fff; }
         .bg-member { background: var(--accent-member); color: #000; }
 
-        .fb-logo { width: 22px; height: 22px; opacity: 0.3; transition: 0.3s; }
+        /* --- New Leader Button Style --- */
+        .btn-rp {
+            margin-top: 8px;
+            display: inline-block;
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-rp:hover {
+            background: #fff;
+            color: #3b82f6;
+            transform: scale(1.05);
+        }
+
+        .fb-logo { width: 22px; height: 22px; opacity: 0.3; transition: 0.3s; margin-left: auto; }
         .card:hover .fb-logo { opacity: 1; transform: scale(1.1); }
 
         #music-container { position: fixed; bottom: 30px; right: 30px; z-index: 100; }
@@ -215,59 +238,26 @@
                     </div>
                     <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
                 </a>
-
-                <a href="https://www.facebook.com/mikey.changretta" target="_blank" class="card" data-name="Mikey Changretta">
-                    <div class="avatar-wrapper">
-                        <div class="avatar" style="border: 2px solid var(--accent-founder);"><img src="https://img5.pic.in.th/file/secure-sv1/cgtlogo4.png"></div>
-                        <div class="status-dot online"></div>
-                    </div>
-                    <div class="info">
-                        <h3>Mikey Changretta</h3>
-                        <span class="badge bg-founder">Owner</span>
-                    </div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
-                </a>
-
-                <a href="https://www.facebook.com/NitroRairak" target="_blank" class="card" data-name="Nitro Changretta">
-                    <div class="avatar-wrapper">
-                        <div class="avatar" style="border: 2px solid var(--accent-founder);"><img src="https://img5.pic.in.th/file/secure-sv1/cgtlogo4.png"></div>
-                        <div class="status-dot online"></div>
-                    </div>
-                    <div class="info">
-                        <h3>Nitro Changretta</h3>
-                        <span class="badge bg-founder">Owner</span>
-                    </div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
-                </a>
-
-                <a href="https://www.facebook.com/flint.changretta" target="_blank" class="card" data-name="Flint Changretta">
-                    <div class="avatar-wrapper">
-                        <div class="avatar" style="border: 2px solid var(--accent-founder);"><img src="https://img5.pic.in.th/file/secure-sv1/cgtlogo4.png"></div>
-                        <div class="status-dot online"></div>
-                    </div>
-                    <div class="info">
-                        <h3>Flint Changretta</h3>
-                        <span class="badge bg-founder">Owner</span>
-                    </div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
-                </a>
-            </div>
+                </div>
         </div>
 
         <div class="group-section" id="leaderSection">
             <h2 class="section-title leader-title">Leader</h2>
             <div class="grid">
-                <a href="https://www.facebook.com/YOUR_LEADER_URL" target="_blank" class="card" data-name="Testui Changretta">
+                <div class="card" data-name="Testui Changretta">
                     <div class="avatar-wrapper">
                         <div class="avatar" style="border: 2px solid var(--accent-leader);"><img src="https://img5.pic.in.th/file/secure-sv1/cgtlogo4.png"></div>
                         <div class="status-dot online"></div>
                     </div>
                     <div class="info">
-                        <h3>#</h3>
-                        <span class="badge bg-leader">LEADER</span>
+                        <h3>Testui Changretta</h3>
+                        <span class="badge bg-leader">LEADER</span><br>
+                        <button class="btn-rp" onclick="openLeaderRP()">LEADER RP</button>
                     </div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
-                </a>
+                    <a href="https://www.facebook.com/YOUR_LEADER_URL" target="_blank">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -281,90 +271,6 @@
                     </div>
                     <div class="info">
                         <h3>Oshi Changretta</h3>
-                        <span class="badge bg-member">MEMBER</span>
-                    </div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
-                </a>
-
-                <a href="https://www.facebook.com/xa.cu.bi/" target="_blank" class="card" data-name="Kati Changretta">
-                    <div class="avatar-wrapper">
-                        <div class="avatar" style="border: 2px solid var(--accent-member);"><img src="https://img5.pic.in.th/file/secure-sv1/cgtlogo4.png"></div>
-                        <div class="status-dot online"></div>
-                    </div>
-                    <div class="info">
-                        <h3>Kati Changretta</h3>
-                        <span class="badge bg-member">MEMBER</span>
-                    </div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
-                </a>
-
-                <a href="https://www.facebook.com/minyu.less" target="_blank" class="card" data-name="Minyu Changretta">
-                    <div class="avatar-wrapper">
-                        <div class="avatar" style="border: 2px solid var(--accent-member);"><img src="https://img5.pic.in.th/file/secure-sv1/cgtlogo4.png"></div>
-                        <div class="status-dot online"></div>
-                    </div>
-                    <div class="info">
-                        <h3>Minyu Changretta</h3>
-                        <span class="badge bg-member">MEMBER</span>
-                    </div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
-                </a>
-
-                <a href="https://www.facebook.com/share/1GYbVDfTr1/?mibextid=wwXIfr" target="_blank" class="card" data-name="Nel Changretta">
-                    <div class="avatar-wrapper">
-                        <div class="avatar" style="border: 2px solid var(--accent-member);"><img src="https://img5.pic.in.th/file/secure-sv1/cgtlogo4.png"></div>
-                        <div class="status-dot online"></div>
-                    </div>
-                    <div class="info">
-                        <h3>Nel Changretta</h3>
-                        <span class="badge bg-member">MEMBER</span>
-                    </div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
-                </a>
-
-                <a href="https://www.facebook.com/share/16oRk5yctu/?mibextid=wwXIfr" target="_blank" class="card" data-name="Monchhichi Changretta">
-                    <div class="avatar-wrapper">
-                        <div class="avatar" style="border: 2px solid var(--accent-member);"><img src="https://img5.pic.in.th/file/secure-sv1/cgtlogo4.png"></div>
-                        <div class="status-dot online"></div>
-                    </div>
-                    <div class="info">
-                        <h3>Monchhichi Changretta</h3>
-                        <span class="badge bg-member">MEMBER</span>
-                    </div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
-                </a>
-
-                <a href="https://www.facebook.com/porchprinceq" target="_blank" class="card" data-name="Porch Changretta">
-                    <div class="avatar-wrapper">
-                        <div class="avatar" style="border: 2px solid var(--accent-member);"><img src="https://img5.pic.in.th/file/secure-sv1/cgtlogo4.png"></div>
-                        <div class="status-dot online"></div>
-                    </div>
-                    <div class="info">
-                        <h3>Porch Changretta</h3>
-                        <span class="badge bg-member">MEMBER</span>
-                    </div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
-                </a>
-
-                <a href="https://www.facebook.com/missin4life/" target="_blank" class="card" data-name="Tammiee Changretta">
-                    <div class="avatar-wrapper">
-                        <div class="avatar" style="border: 2px solid var(--accent-member);"><img src="https://img5.pic.in.th/file/secure-sv1/cgtlogo4.png"></div>
-                        <div class="status-dot online"></div>
-                    </div>
-                    <div class="info">
-                        <h3>Tammiee Changretta</h3>
-                        <span class="badge bg-member">MEMBER</span>
-                    </div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
-                </a>
-
-                <a href="https://www.facebook.com/misstiw.misstiw/" target="_blank" class="card" data-name="Tiw Changretta">
-                    <div class="avatar-wrapper">
-                        <div class="avatar" style="border: 2px solid var(--accent-member);"><img src="https://img5.pic.in.th/file/secure-sv1/cgtlogo4.png"></div>
-                        <div class="status-dot online"></div>
-                    </div>
-                    <div class="info">
-                        <h3>Tiw Changretta</h3>
                         <span class="badge bg-member">MEMBER</span>
                     </div>
                     <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="fb-logo">
@@ -391,6 +297,12 @@
     </footer>
 
     <script>
+        // ฟังก์ชันสำหรับปุ่ม LEADER RP
+        function openLeaderRP() {
+            // คุณสามารถเปลี่ยน alert เป็น window.location.href = 'ลิงก์ที่ต้องการ';
+            alert("กำลังเข้าสู่โหมด LEADER RP ของ Changretta!");
+        }
+
         // Search Filter
         const searchInput = document.getElementById('searchInput');
         const cards = document.querySelectorAll('.card');
