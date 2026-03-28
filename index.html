@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONELESS CGT - ADMIN SYSTEM</title>
+    <title>ONELESS CGT</title>
     
     <link rel="icon" type="image/png" href="https://img1.pic.in.th/images/cgtlogo2.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,7 +16,7 @@
         :root {
             --primary: #f3d48b;
             --bg-dark: #0a0a0b;
-            --card-bg: rgba(20, 20, 25, 0.7);
+            --card-bg: rgba(20, 20, 25, 0.8);
             --border-color: rgba(255, 255, 255, 0.1);
             --danger: #ff4757;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -36,11 +36,11 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .fade-in { animation: fadeIn 0.5s ease forwards; }
+        .fade-in { animation: fadeIn 0.4s ease forwards; }
 
         nav { 
             display: flex; justify-content: space-between; padding: 15px 5%; 
@@ -65,83 +65,90 @@
         input, select { 
             background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); padding: 12px; 
             color: #fff; border-radius: 8px; font-family: 'Kanit'; outline: none; width: 100%;
-            transition: var(--transition);
         }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(243, 212, 139, 0.2); }
-        label { font-size: 0.8rem; color: var(--primary); margin-bottom: 8px; display: block; opacity: 0.8; }
+        input:focus { border-color: var(--primary); }
 
         .btn-action { 
             background: var(--primary); color: #000; border: none; padding: 12px 25px; 
             border-radius: 8px; font-weight: 700; font-family: 'Orbitron'; cursor: pointer; 
             transition: var(--transition); display: inline-flex; align-items: center; gap: 8px;
-            justify-content: center;
         }
-        .btn-action:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(243, 212, 139, 0.3); }
+        .btn-action:hover { transform: translateY(-2px); opacity: 0.9; }
         .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
 
-        .section-title { 
-            font-family: 'Orbitron'; font-size: 1.1rem; font-weight: 900; 
-            letter-spacing: 5px; color: #fff; margin: 50px 0 20px; 
-            display: flex; align-items: center; gap: 15px;
-        }
-        .section-title::after { content: ""; height: 1px; flex-grow: 1; background: linear-gradient(90deg, var(--primary), transparent); }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        /* --- Member Card (Updated to Match Image) --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
         
         .member-card {
-            background: var(--card-bg); border: 1px solid var(--border-color);
-            padding: 15px; display: flex; align-items: center; gap: 15px;
-            border-radius: 12px; position: relative; transition: var(--transition);
-            backdrop-filter: blur(5px);
+            background: #0f0f11; /* พื้นหลังเข้มตามรูป */
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            border-radius: 18px;
+            position: relative;
+            transition: var(--transition);
         }
-        .member-card:hover { border-color: var(--primary); background: rgba(255,255,255,0.05); }
         
         .avatar-box { 
-            width: 65px; height: 65px; background-size: cover; 
-            background-position: center; border-radius: 50%; 
-            border: 2px solid var(--primary); flex-shrink: 0;
+            width: 75px; height: 75px; 
+            background-size: cover; background-position: center; 
+            border-radius: 50%; border: 2px solid #fff; 
+            flex-shrink: 0; margin-right: 20px;
         }
+
+        .member-info { flex-grow: 1; }
 
         .role-tag { 
-            font-family: 'Orbitron'; font-size: 0.6rem; font-weight: 900; 
-            padding: 2px 8px; border-radius: 20px; background: var(--primary); color: #000;
-            margin-bottom: 5px; display: inline-block;
+            font-family: 'Orbitron'; font-size: 11px; font-weight: 900; 
+            padding: 3px 12px; border-radius: 50px; 
+            background: #fff; color: #000; /* ป้ายขาวตัวดำตามรูป */
+            margin-bottom: 8px; display: inline-block;
+            text-transform: uppercase;
         }
 
+        .member-name {
+            font-family: 'Orbitron'; font-size: 22px; font-weight: 700;
+            color: #fff; margin-bottom: 4px; line-height: 1;
+        }
+
+        .fb-link {
+            font-size: 12px; color: #888; text-decoration: none;
+            font-family: 'Orbitron'; letter-spacing: 1px;
+        }
+
+        /* --- Admin Controls (Matched Image) --- */
         .admin-controls {
-            display: flex; flex-direction: column; gap: 8px;
-            padding-left: 10px; border-left: 1px solid var(--border-color);
+            display: flex; flex-direction: column; 
+            justify-content: space-around;
+            height: 80px; padding-left: 20px;
+            margin-left: 15px;
+            border-left: 1px solid rgba(255,255,255,0.2); /* เส้นคั่นแนวตั้ง */
         }
-        .ctrl-btn {
-            background: none; border: none; cursor: pointer; font-size: 1.1rem;
-            transition: var(--transition); padding: 5px;
-        }
-        .ctrl-btn.edit { color: var(--primary); }
-        .ctrl-btn.delete { color: var(--danger); }
-        .ctrl-btn:hover { transform: scale(1.2); }
-
-        .log-container {
-            max-height: 180px; overflow-y: auto; font-size: 0.8rem;
-            background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px;
-        }
-        .log-item { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: #aaa; }
         
+        .ctrl-btn {
+            background: none; border: none; cursor: pointer; 
+            font-size: 20px; transition: var(--transition);
+        }
+        .ctrl-btn.edit { color: #fff; } /* ดินสอสีขาว */
+        .ctrl-btn.delete { color: var(--danger); } /* ถังขยะสีแดง */
+        .ctrl-btn:hover { transform: scale(1.15); }
+
         .hidden { display: none !important; }
+        
         .toast { 
             position: fixed; top: 20px; right: 20px; background: var(--primary); 
-            color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 900; 
-            z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 900; z-index: 10000;
         }
 
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-            display: none; align-items: center; justify-content: center;
-            z-index: 2000; backdrop-filter: blur(10px);
+            display: none; align-items: center; justify-content: center; z-index: 2000;
         }
-        .custom-modal {
-            background: #151518; border: 1px solid var(--primary); padding: 30px;
-            border-radius: 20px; max-width: 400px; width: 95%; text-align: center;
-        }
+        .custom-modal { background: #151518; border: 1px solid var(--primary); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; }
+
+        .section-title { font-family: 'Orbitron'; font-size: 1.1rem; letter-spacing: 5px; margin: 40px 0 20px; display: flex; align-items: center; gap: 15px; }
+        .section-title::after { content: ""; height: 1px; flex-grow: 1; background: linear-gradient(90deg, var(--primary), transparent); }
     </style>
 </head>
 <body id="mainBody">
@@ -149,16 +156,16 @@
     <nav>
         <div id="brand-name">ONELESS CGT</div>
         <div style="display: flex; gap: 10px;">
-            <button onclick="showView('memberView')" class="btn-action btn-secondary"><i class="fas fa-home"></i> HOME</button>
-            <button onclick="checkAdminStatus()" id="navAdmin" class="btn-action"><i class="fas fa-user-shield"></i> ADMIN</button>
+            <button onclick="showView('memberView')" class="btn-action btn-secondary">HOME</button>
+            <button onclick="checkAdminStatus()" id="navAdmin" class="btn-action">ADMIN</button>
         </div>
     </nav>
 
     <div id="uiModal" class="modal-overlay">
         <div class="custom-modal">
-            <h3 id="uiModalTitle" style="color:var(--primary);">ยืนยัน</h3>
-            <p id="uiModalDesc" style="color:#ccc; margin-bottom:25px;">ยืนยันการดำเนินการ?</p>
-            <div style="display:flex; gap:10px; justify-content:center;">
+            <h3 id="uiModalTitle">ยืนยัน</h3>
+            <p id="uiModalDesc">ยืนยันการดำเนินการ?</p>
+            <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
                 <button id="uiModalConfirm" class="btn-action">ตกลง</button>
                 <button onclick="closeUIModal()" class="btn-action btn-secondary">ยกเลิก</button>
             </div>
@@ -168,69 +175,46 @@
     <div class="container">
         <section id="adminLoginView" class="hidden fade-in" style="padding-top: 10vh;">
             <div style="max-width: 400px; margin: auto; text-align: center;" class="glass-panel">
-                <i class="fas fa-user-lock" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
-                <h2 style="font-family: 'Kanit';">ADMIN LOGIN</h2>
-                <input type="text" id="adminName" placeholder="ชื่อผู้ใช้งาน" style="margin-bottom: 10px; text-align: center;">
-                <input type="password" id="loginPass" placeholder="รหัสผ่าน" style="margin-bottom: 20px; text-align: center;">
-                <button onclick="handleLogin()" class="btn-action" style="width: 100%;">เข้าสู่ระบบ</button>
+                <h2 style="font-family: 'Orbitron'; color: var(--primary);">LOGIN</h2>
+                <input type="text" id="adminName" placeholder="ADMIN NAME" style="margin-bottom: 10px; text-align: center;">
+                <input type="password" id="loginPass" placeholder="PASSWORD" style="margin-bottom: 20px; text-align: center;">
+                <button onclick="handleLogin()" class="btn-action" style="width: 100%;">LOGIN SYSTEM</button>
             </div>
         </section>
 
         <section id="memberView" class="fade-in">
             <div id="adminPanel" class="hidden">
-                <div class="glass-panel" style="border-left: 5px solid var(--primary);">
-                    <h3 style="color: var(--primary); margin: 0 0 20px 0;"><i class="fas fa-tools"></i> ส่วนการจัดการระบบ</h3>
-                    
-                    <div class="admin-grid" style="margin-bottom: 25px;">
-                        <div>
-                            <label>สีธีมหลัก</label>
-                            <input type="color" id="configColor" oninput="applyColor(this.value)">
-                        </div>
-                        <div>
-                            <label>รูปพื้นหลัง (URL)</label>
-                            <input type="text" id="configBG" placeholder="https://..." onkeyup="applyBG(this.value)">
-                        </div>
-                        <div><label>หัวข้อ Founder</label><input type="text" id="configHeadFounder" onkeyup="applyHeaders()"></div>
-                        <div><label>หัวข้อ Leader</label><input type="text" id="configHeadLeader" onkeyup="applyHeaders()"></div>
+                <div class="glass-panel">
+                    <h3 style="color: var(--primary); margin-top: 0;">CONTROL PANEL</h3>
+                    <div class="admin-grid">
+                        <input type="hidden" id="editMemberId">
+                        <input type="text" id="newName" placeholder="ชื่อ">
+                        <input type="text" id="newImg" placeholder="ลิ้งก์รูป">
+                        <input type="text" id="newFB" placeholder="Facebook Link">
+                        <select id="newRole">
+                            <option value="founder">Founder</option>
+                            <option value="leader">Leader</option>
+                            <option value="member">Member</option>
+                        </select>
                     </div>
-
-                    <div class="glass-panel" style="background: rgba(0,0,0,0.2);">
-                        <h4 style="margin-top:0;"><i class="fas fa-edit"></i> ฟอร์มจัดการสมาชิก</h4>
-                        <div class="admin-grid" style="margin-bottom: 15px;">
-                            <input type="hidden" id="editMemberId">
-                            <input type="text" id="newName" placeholder="ชื่อ-นามสกุล">
-                            <input type="text" id="newImg" placeholder="ลิ้งก์รูปโปรไฟล์">
-                            <input type="text" id="newFB" placeholder="ลิ้งก์ Facebook">
-                            <select id="newRole">
-                                <option value="founder">Founder</option>
-                                <option value="leader">Leader</option>
-                                <option value="member">Member</option>
-                            </select>
-                        </div>
-                        <div style="display: flex; gap: 10px;">
-                            <button onclick="saveMember()" id="saveBtn" class="btn-action">บันทึกสมาชิก</button>
-                            <button onclick="resetForm()" class="btn-action btn-secondary">ล้างฟอร์ม</button>
-                        </div>
-                    </div>
-
-                    <div style="margin-top: 20px;">
-                        <label><i class="fas fa-history"></i> ประวัติการเข้าใช้ (Logs)</label>
-                        <div id="loginLogs" class="log-container"></div>
+                    <div style="margin-top: 15px; display: flex; gap: 10px;">
+                        <button onclick="saveMember()" id="saveBtn" class="btn-action">SAVE MEMBER</button>
+                        <button onclick="resetForm()" class="btn-action btn-secondary">RESET</button>
                     </div>
                 </div>
             </div>
 
             <div id="rosterDisplay">
                 <div id="section-founder">
-                    <div class="section-title" id="titleFounder">FOUNDERS</div>
+                    <div class="section-title">FOUNDERS</div>
                     <div class="grid" id="founderGrid"></div>
                 </div>
                 <div id="section-leader">
-                    <div class="section-title" id="titleLeader">LEADERS</div>
+                    <div class="section-title">LEADERS</div>
                     <div class="grid" id="leaderGrid"></div>
                 </div>
                 <div id="section-member">
-                    <div class="section-title" id="titleMember">MEMBERS</div>
+                    <div class="section-title">MEMBERS</div>
                     <div class="grid" id="memberGrid"></div>
                 </div>
             </div>
@@ -246,9 +230,8 @@
 
         function showToast(m) {
             const t = document.createElement('div'); t.className = 'toast fade-in';
-            t.innerHTML = `<i class="fas fa-bell"></i> ${m}`;
-            document.body.appendChild(t);
-            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 3000);
+            t.innerText = m; document.body.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
         }
 
         function openUIModal(title, desc, onConfirm) {
@@ -264,61 +247,22 @@
             document.getElementById('adminLoginView').classList.toggle('hidden', v !== 'adminLoginView');
         }
 
-        function applyColor(c) { document.documentElement.style.setProperty('--primary', c); }
-        function applyBG(url) { document.body.style.backgroundImage = url ? `url('${url}')` : ''; }
-        function applyHeaders() {
-            document.getElementById('titleFounder').innerText = document.getElementById('configHeadFounder').value || "FOUNDERS";
-            document.getElementById('titleLeader').innerText = document.getElementById('configHeadLeader').value || "LEADERS";
-        }
-
         function handleLogin() {
             const pass = document.getElementById('loginPass').value;
-            const name = document.getElementById('adminName').value || "Admin User";
-            
             if(pass === "cgtteam790" || pass === "changretta790") {
                 isAdmin = true;
-                db.ref('logs').push({
-                    user: name,
-                    time: new Date().toLocaleString('th-TH'),
-                    action: "Login เข้าสู่ระบบแอดมิน"
-                });
-
                 document.getElementById('adminPanel').classList.remove('hidden');
-                document.getElementById('navAdmin').innerHTML = '<i class="fas fa-sign-out-alt"></i> LOGOUT';
+                document.getElementById('navAdmin').innerText = 'LOGOUT';
                 showView('memberView');
-                showToast(`ยินดีต้อนรับคุณ ${name}`);
-                // สั่ง Render รายชื่อใหม่เพื่อให้ปุ่มแก้ไขขึ้นมา
-                db.ref('roster').once('value', () => {}); 
+                showToast("Admin Logged In");
             } else {
-                showToast("รหัสผ่านไม่ถูกต้อง!");
+                showToast("Wrong Password!");
             }
         }
 
         function checkAdminStatus() {
-            if (isAdmin) { location.reload(); } else { showView('adminLoginView'); }
+            if (isAdmin) location.reload(); else showView('adminLoginView');
         }
-
-        db.ref('logs').limitToLast(10).on('value', snap => {
-            const logsDiv = document.getElementById('loginLogs');
-            logsDiv.innerHTML = "";
-            const data = snap.val();
-            if(data) {
-                Object.values(data).reverse().forEach(log => {
-                    logsDiv.innerHTML += `<div class="log-item">[${log.time}] <b>${log.user}</b>: ${log.action}</div>`;
-                });
-            }
-        });
-
-        db.ref('settings').on('value', snap => {
-            const s = snap.val() || {};
-            if(s.primary) applyColor(s.primary);
-            if(s.bg) applyBG(s.bg);
-            document.getElementById('configColor').value = s.primary || "#f3d48b";
-            document.getElementById('configBG').value = s.bg || "";
-            document.getElementById('configHeadFounder').value = s.headFounder || "FOUNDERS";
-            document.getElementById('configHeadLeader').value = s.headLeader || "LEADERS";
-            applyHeaders();
-        });
 
         db.ref('roster').on('value', snap => {
             const grids = { founder: document.getElementById('founderGrid'), leader: document.getElementById('leaderGrid'), member: document.getElementById('memberGrid') };
@@ -332,17 +276,17 @@
                 card.className = 'member-card fade-in';
                 card.innerHTML = `
                     <div class="avatar-box" style="background-image: url('${item.img || ''}')"></div>
-                    <div style="flex:1">
-                        <span class="role-tag">${item.role.toUpperCase()}</span>
-                        <div style="font-weight:700; font-family:'Orbitron'; font-size:1.1rem; color: #fff;">${item.name}</div>
-                        <a href="${item.fb}" target="_blank" style="font-size:0.75rem; color:var(--primary); text-decoration:none; opacity:0.8;">FACEBOOK</a>
+                    <div class="member-info">
+                        <span class="role-tag">${item.role}</span>
+                        <div class="member-name">${item.name}</div>
+                        <a href="${item.fb}" target="_blank" class="fb-link">FACEBOOK</a>
                     </div>
                     ${isAdmin ? `
                         <div class="admin-controls">
-                            <button class="ctrl-btn edit" title="แก้ไข" onclick="editMember('${id}', ${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                            <button class="ctrl-btn edit" onclick="editMember('${id}', ${JSON.stringify(item).replace(/"/g, '&quot;')})">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
-                            <button class="ctrl-btn delete" title="ลบ" onclick="askDeleteMember('${id}')">
+                            <button class="ctrl-btn delete" onclick="askDeleteMember('${id}')">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </div>
@@ -360,25 +304,13 @@
                 fb: document.getElementById('newFB').value,
                 role: document.getElementById('newRole').value
             };
+            if(!data.name) return showToast("Please enter name");
 
-            if(!data.name) return showToast("กรุณากรอกชื่อสมาชิก");
-
-            openUIModal("บันทึกข้อมูล", `ยืนยันการบันทึกข้อมูล ${data.name}?`, () => {
-                if(id) {
-                    db.ref('roster/' + id).update(data);
-                    showToast("อัปเดตข้อมูลสำเร็จ");
-                } else {
-                    db.ref('roster').push(data);
-                    showToast("เพิ่มสมาชิกใหม่สำเร็จ");
-                }
-                
-                db.ref('settings').update({
-                    primary: document.getElementById('configColor').value,
-                    bg: document.getElementById('configBG').value,
-                    headFounder: document.getElementById('configHeadFounder').value,
-                    headLeader: document.getElementById('configHeadLeader').value
-                });
+            openUIModal("Save Changes", `Confirm saving ${data.name}?`, () => {
+                if(id) db.ref('roster/' + id).update(data);
+                else db.ref('roster').push(data);
                 resetForm();
+                showToast("Success!");
             });
         }
 
@@ -388,24 +320,21 @@
             document.getElementById('newImg').value = data.img;
             document.getElementById('newFB').value = data.fb;
             document.getElementById('newRole').value = data.role;
-            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-sync-alt"></i> อัปเดตข้อมูลสมาชิก';
-            
-            // เลื่อนจอขึ้นด้านบนแบบนุ่มนวลเพื่อให้เห็นฟอร์ม
+            document.getElementById('saveBtn').innerText = "UPDATE MEMBER";
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            showToast("แก้ไขข้อมูล: " + data.name);
         }
 
         function askDeleteMember(id) {
-            openUIModal("ลบข้อมูล", "ยืนยันการลบสมาชิกนี้ถาวร?", () => {
+            openUIModal("Delete", "Are you sure you want to delete?", () => {
                 db.ref('roster/' + id).remove();
-                showToast("ลบเรียบร้อยแล้ว");
+                showToast("Deleted");
             });
         }
 
         function resetForm() {
             document.getElementById('editMemberId').value = "";
             ['newName','newImg','newFB'].forEach(i => document.getElementById(i).value = "");
-            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-save"></i> บันทึกสมาชิก';
+            document.getElementById('saveBtn').innerText = "SAVE MEMBER";
         }
     </script>
 </body>
