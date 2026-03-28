@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHANGRETTA[LESS]</title>
+    <title>CHANGRETTA[LESS] - ADMIN PANEL</title>
     
     <link rel="icon" type="image/png" href="https://img1.pic.in.th/images/cgtlogo2.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -33,6 +33,7 @@
             font-family: 'Rajdhani', 'Kanit', sans-serif;
             margin: 0; min-height: 100vh;
             overflow-x: hidden;
+            transition: background 0.5s ease;
         }
 
         /* Jumpscare Video Overlay */
@@ -44,9 +45,7 @@
             display: none;
             pointer-events: none;
         }
-        #video-jumpscare iframe {
-            width: 100%; height: 100%; border: none;
-        }
+        #video-jumpscare iframe { width: 100%; height: 100%; border: none; }
 
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
@@ -138,6 +137,9 @@
             margin-top: 15px; font-family: monospace; color: var(--primary);
             border: 1px dashed var(--primary); word-break: break-all;
         }
+
+        .fade-in { animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body id="mainBody">
@@ -161,9 +163,8 @@
                 <button onclick="handleLoginByKey()" class="btn-action" style="margin-bottom: 25px;">เข้าสู่ระบบ</button>
                 
                 <hr style="opacity: 0.1; margin-bottom: 20px;">
-                
-                <p style="font-size: 0.8rem; opacity: 0.6;">สร้าง KEY ใหม่ (ต้องใส่รหัสยืนยัน)</p>
-                <input type="password" id="genPass" placeholder="รหัสยืนยัน (1234)" style="margin-bottom: 10px; text-align: center;">
+                <p style="font-size: 0.8rem; opacity: 0.6;">สร้าง KEY ใหม่ (ต้องใช้รหัสยืนยัน)</p>
+                <input type="password" id="genPass" placeholder="รหัสยืนยันแอดมิน" style="margin-bottom: 10px; text-align: center;">
                 <button onclick="generateNewKey()" class="btn-action btn-secondary" style="width: 100%; font-size: 0.8rem;">สร้าง ACCESS KEY</button>
                 <div id="newKeyResult" class="hidden key-display"></div>
             </div>
@@ -232,22 +233,24 @@
     </div>
 
     <script>
-        const firebaseConfig = { databaseURL: "https://calvyn-999ea-default-rtdb.asia-southeast1.firebasedatabase.app/" };
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+            databaseURL: "https://changretta-e3be5-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         let isAdmin = false;
 
+        // --- Helper Functions ---
         function showToast(m) {
             const t = document.createElement('div'); t.className = 'toast fade-in';
             t.innerHTML = m; document.body.appendChild(t);
             setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 3000);
         }
 
-        // --- Video Jumpscare Function ---
         function triggerJumpscare() {
             const container = document.getElementById('video-jumpscare');
-            // นาทีที่ 0.13 คือวินาทีที่ 13 (start=13)
             container.innerHTML = `<iframe src="https://www.youtube.com/embed/u8UdAAX_n28?autoplay=1&controls=0&start=13&mute=0" allow="autoplay"></iframe>`;
             container.style.display = 'block';
             document.body.classList.add('shaking');
@@ -256,7 +259,7 @@
                 container.style.display = 'none';
                 container.innerHTML = '';
                 document.body.classList.remove('shaking');
-            }, 4000); // แสดงผล 4 วินาทีแล้วหายไป
+            }, 4000);
         }
 
         function showView(v) {
@@ -267,14 +270,14 @@
         // --- KEY SYSTEM ---
         function generateNewKey() {
             const pass = document.getElementById('genPass').value;
-            if(pass === "cgtteam790") {
-                const newKey = 'KEY-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            if(pass === "cgtteam790") { // รหัสผ่านสำหรับสร้าง KEY
+                const newKey = 'CGT-' + Math.random().toString(36).substr(2, 9).toUpperCase();
                 db.ref('validKeys/' + newKey).set(true);
                 const res = document.getElementById('newKeyResult');
                 res.innerHTML = `คัดลอก KEY นี้:<br><strong>${newKey}</strong>`;
                 res.classList.remove('hidden');
                 document.getElementById('genPass').value = "";
-                showToast("สร้าง KEY สำเร็จ");
+                showToast("สร้าง ACCESS KEY สำเร็จ");
             } else {
                 triggerJumpscare();
             }
@@ -290,17 +293,23 @@
                     document.getElementById('adminPanel').classList.remove('hidden');
                     document.getElementById('navAdmin').innerHTML = '<i class="fas fa-sign-out-alt"></i> LOGOUT';
                     showView('memberView');
-                    showToast("ยินดีต้อนรับ แอดมิน!");
-                    renderRoster();
+                    showToast("เข้าสู่ระบบแอดมินสำเร็จ");
+                    renderRoster(); // Re-render to show edit controls
                 } else {
                     triggerJumpscare();
                 }
             });
         }
 
-        function checkAdminStatus() { isAdmin ? location.reload() : showView('adminLoginView'); }
+        function checkAdminStatus() { 
+            if(isAdmin) {
+                location.reload(); // Logout simple way
+            } else {
+                showView('adminLoginView');
+            }
+        }
 
-        // --- SETTINGS (FIXED) ---
+        // --- SETTINGS REALTIME SYNC ---
         function updateSetting(key, value) {
             if(!isAdmin) return;
             db.ref('settings/' + key).set(value);
@@ -322,19 +331,21 @@
             document.getElementById('configHeadLeader').value = s.headLeader || "";
         });
 
-        // --- ROSTER ---
+        // --- ROSTER REALTIME SYNC ---
         function renderRoster() {
             db.ref('roster').on('value', snap => {
                 const grids = { founder: 'founderGrid', leader: 'leaderGrid', member: 'memberGrid' };
                 Object.values(grids).forEach(id => document.getElementById(id).innerHTML = "");
+                
                 const data = snap.val();
                 if(!data) return;
+
                 Object.keys(data).forEach(id => {
                     const item = data[id];
                     const card = document.createElement('div');
                     card.className = 'member-card fade-in';
                     card.innerHTML = `
-                        <div class="avatar-box" style="background-image: url('${item.img || ''}')"></div>
+                        <div class="avatar-box" style="background-image: url('${item.img || 'https://img1.pic.in.th/images/cgtlogo2.png'}')"></div>
                         <div style="flex:1">
                             <span class="role-tag">${item.role.toUpperCase()}</span>
                             <div style="font-weight:700; font-family:'Orbitron'; font-size:1.1rem;">${item.name}</div>
@@ -350,9 +361,13 @@
                 });
             });
         }
+
+        // Initial render
         renderRoster();
 
+        // --- MEMBER CRUD FUNCTIONS ---
         function saveMember() {
+            if(!isAdmin) return showToast("สิทธิ์ไม่ถูกต้อง");
             const id = document.getElementById('editMemberId').value;
             const memberData = {
                 name: document.getElementById('newName').value,
@@ -360,10 +375,18 @@
                 fb: document.getElementById('newFB').value,
                 role: document.getElementById('newRole').value
             };
+            
             if(!memberData.name) return showToast("กรุณากรอกชื่อ");
-            if(id) db.ref('roster/' + id).update(memberData);
-            else db.ref('roster').push(memberData);
-            showToast("สำเร็จ");
+
+            if(id) {
+                db.ref('roster/' + id).update(memberData)
+                    .then(() => showToast("อัปเดตข้อมูลสำเร็จ"))
+                    .catch(e => showToast("เกิดข้อผิดพลาด"));
+            } else {
+                db.ref('roster').push(memberData)
+                    .then(() => showToast("เพิ่มสมาชิกใหม่แล้ว"))
+                    .catch(e => showToast("เกิดข้อผิดพลาด"));
+            }
             resetForm();
         }
 
@@ -374,11 +397,15 @@
             document.getElementById('newFB').value = fb;
             document.getElementById('newRole').value = role;
             document.getElementById('saveBtn').innerText = "อัปเดตสมาชิก";
+            document.getElementById('formTitle').innerText = "แก้ไขข้อมูลสมาชิก";
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function deleteMember(id) {
-            if(confirm("ลบ?")) db.ref('roster/' + id).remove();
+            if(confirm("ยืนยันการลบสมาชิกนี้?")) {
+                db.ref('roster/' + id).remove()
+                    .then(() => showToast("ลบข้อมูลแล้ว"));
+            }
         }
 
         function resetForm() {
@@ -387,6 +414,7 @@
             document.getElementById('newImg').value = "";
             document.getElementById('newFB').value = "";
             document.getElementById('saveBtn').innerText = "บันทึกสมาชิก";
+            document.getElementById('formTitle').innerText = "จัดการสมาชิก";
         }
     </script>
 </body>
