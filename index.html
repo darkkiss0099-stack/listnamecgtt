@@ -174,7 +174,7 @@
                 <hr style="opacity: 0.1; margin-bottom: 20px;">
                 
                 <p style="font-size: 0.8rem; opacity: 0.6;">ไม่มี KEY? ต้องได้รับอนุญาตก่อนสร้าง</p>
-                <input type="password" id="genPass" placeholder="รหัสสร้าง KEY (changretta790)" style="margin-bottom: 10px; text-align: center;">
+                <input type="password" id="genPass" placeholder="รหัสสร้าง KEY (xxxxx)" style="margin-bottom: 10px; text-align: center;">
                 <button onclick="generateNewKey()" class="btn-action btn-secondary" style="width: 100%; font-size: 0.8rem;">สร้าง ACCESS KEY ใหม่</button>
                 <div id="newKeyResult" class="hidden key-display"></div>
             </div>
@@ -275,7 +275,7 @@
         // --- NEW KEY SYSTEM ---
         function generateNewKey() {
             const pass = document.getElementById('genPass').value;
-            if(pass === "xxxxx") {
+            if(pass === "changretta790") {
                 const newKey = 'KEY-' + Math.random().toString(36).substr(2, 9).toUpperCase();
                 db.ref('validKeys/' + newKey).set(true);
                 const res = document.getElementById('newKeyResult');
