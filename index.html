@@ -3,114 +3,399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>MEMBER CALVYN</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="bg-gray-100 font-sans">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Kanit:wght@200;400;900&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
-    <div class="flex h-screen overflow-hidden">
+    <style>
+        :root {
+            --primary: #f3d48b;
+            --bg-dark: #050505;
+            --card-bg: rgba(15, 15, 15, 0.85);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --online-green: #00ff88;
+            --danger: #ff0000;
+            --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            margin: 0; min-height: 100vh;
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.65); z-index: -1;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+
+        /* --- Navbar --- */
+        nav { 
+            display: flex; justify-content: space-between; padding: 15px 40px; 
+            background: rgba(0,0,0,0.85); align-items: center; position: sticky; 
+            top: 0; z-index: 100; backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-color);
+        }
+        #brand-name { font-weight: 900; letter-spacing: 5px; font-family: 'Orbitron'; font-size: 1.6rem; color: #fff; text-shadow: 0 0 15px rgba(243, 212, 139, 0.4); }
+        nav button { background: none; border: none; color: #666; cursor: pointer; font-size: 0.8rem; transition: var(--transition); font-family: 'Orbitron'; font-weight: 700; }
+        nav button.active { color: #fff; text-shadow: 0 0 15px var(--primary); }
+
+        /* --- Admin Login Section (White Theme) --- */
+        #adminLoginView .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px; border-radius: 30px; width: 100%; max-width: 380px; text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6); color: #111;
+            transform: translateY(20px); animation: loginShow 0.8s forwards;
+        }
+        @keyframes loginShow { to { opacity: 1; transform: translateY(0); } }
+        #adminLoginView h2 { font-family: 'Orbitron'; font-weight: 900; color: #111; margin-bottom: 30px; letter-spacing: 3px; }
+        #adminLoginView input { width: 100%; background: #f4f4f4; border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; color: #000; border-radius: 12px; outline: none; transition: 0.3s; font-weight: 700; text-align: center; }
+        #adminLoginView input:focus { border-color: #111; background: #fff; }
+        #adminLoginView button { width: 100%; background: #111; color: #fff; padding: 18px; border: none; border-radius: 12px; font-weight: 900; cursor: pointer; font-family: 'Orbitron'; letter-spacing: 2px; transition: 0.3s; }
+        #adminLoginView button:hover { background: var(--danger); transform: scale(1.02); }
+
+        /* --- Admin Wrapper --- */
+        #adminWrapper {
+            background: rgba(20, 10, 10, 0.95); border: 1px solid var(--primary); 
+            border-radius: 20px; margin-bottom: 40px; overflow: hidden;
+            transition: var(--transition); max-height: 2000px;
+            backdrop-filter: blur(20px); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        #adminWrapper.collapsed { max-height: 55px; border-color: #222; }
+        .admin-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 25px; cursor: pointer; background: rgba(243, 212, 139, 0.05);
+        }
+        .admin-content { padding: 30px; }
+        .admin-sub-title { font-family: 'Orbitron'; font-size: 0.75rem; color: var(--primary); margin-bottom: 20px; display: block; border-left: 5px solid var(--primary); padding-left: 10px; font-weight: 900; letter-spacing: 2px; }
+
+        /* --- Roster Headers (หนาและชัด) --- */
+        .section-title { 
+            font-family: 'Orbitron'; font-size: 1.2rem; font-weight: 900; 
+            letter-spacing: 12px; color: #fff; margin: 70px 0 30px; 
+            display: flex; align-items: center; gap: 20px;
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+        .section-title::after { content: ""; height: 3px; flex-grow: 1; background: linear-gradient(to right, #444, transparent); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+
+        .member-card {
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            padding: 22px; display: flex; align-items: center; gap: 20px;
+            border-radius: 10px; position: relative; backdrop-filter: blur(15px); 
+            transition: var(--transition); opacity: 0; transform: translateY(20px);
+            cursor: pointer;
+        }
+        .member-card.show { opacity: 1; transform: translateY(0); }
+        .member-card:hover { border-color: var(--primary); background: rgba(35, 35, 35, 0.95); transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+
+        .avatar-box { width: 80px; height: 80px; background-size: cover; background-position: center; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); transition: var(--transition); }
+        .member-card:hover .avatar-box { transform: scale(1.05); border-color: var(--primary); }
+        .status-pulse { position: absolute; bottom: 20px; left: 88px; width: 12px; height: 12px; background: var(--online-green); border-radius: 50%; box-shadow: 0 0 15px var(--online-green); border: 2px solid #000; }
         
-        <aside class="w-64 bg-slate-800 text-white flex-shrink-0 hidden md:flex flex-col">
-            <div class="p-6 text-2xl font-bold border-b border-slate-700">
-                🚀 MyAdmin
+        .name { font-family: 'Orbitron'; font-size: 1.25rem; margin: 0; color: #fff; font-weight: 900; letter-spacing: 1px; }
+        .role-tag { font-family: 'Orbitron'; font-size: 0.65rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .role-founder { color: var(--primary); }
+        .role-leader { color: #e74c3c; }
+        .role-member { color: #aaa; }
+
+        .fb-link { font-size: 0.75rem; color: #555; text-decoration: none; margin-top: 8px; display: inline-block; transition: 0.3s; font-family: 'Orbitron'; font-weight: 700; }
+        .fb-link:hover { color: #fff; letter-spacing: 1px; }
+
+        /* --- Player Smooth UI --- */
+        .bottom-ui { position: fixed; bottom: 30px; right: 30px; z-index: 1000; }
+        .music-mini-player { display: flex; align-items: center; background: rgba(15, 15, 15, 0.98); border: 1px solid var(--border-color); padding: 10px; width: 270px; cursor: pointer; border-radius: 15px; transition: var(--transition); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+        .music-mini-player:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .full-player { position: fixed; bottom: 30px; right: 30px; width: 330px; background: rgba(8, 8, 8, 0.99); border: 1px solid var(--border-color); padding: 30px; display: none; flex-direction: column; border-radius: 25px; box-shadow: 0 30px 100px rgba(0,0,0,1); animation: slideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+
+        .hidden { display: none !important; }
+        .toast { position: fixed; top: 100px; right: 20px; background: #fff; color: #000; padding: 18px 40px; border-radius: 15px; font-weight: 900; transform: translateX(150%); transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 9999; font-family: 'Orbitron'; font-size: 0.85rem; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .toast.show { transform: translateX(0); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div id="brand-name">CALVYN</div>
+        <div style="display: flex; gap: 30px;">
+            <button onclick="showView('memberView')" id="navMembers" class="active">MEMBERS</button>
+            <button onclick="showView('adminLoginView')" id="navAdmin">ADMIN</button>
+        </div>
+    </nav>
+
+    <div id="toast-container"></div>
+
+    <div class="container">
+        <section id="adminLoginView" class="hidden" style="display: flex; align-items: center; justify-content: center; min-height: 70vh;">
+            <div class="login-card">
+                <h2>ADMIN LOGIN</h2>
+                <input type="text" id="loginUser" placeholder="OPERATOR ID">
+                <input type="password" id="loginPass" placeholder="PASSKEY">
+                <button onclick="handleLogin()">INITIALIZE SYSTEM</button>
             </div>
-            <nav class="flex-grow p-4 space-y-2">
-                <a href="#" class="block py-2.5 px-4 rounded bg-blue-600 transition duration-200">
-                    <i class="fas fa-home mr-2"></i> หน้าแรก
-                </a>
-                <a href="#" class="block py-2.5 px-4 rounded hover:bg-slate-700 transition duration-200">
-                    <i class="fas fa-users mr-2"></i> จัดการผู้ใช้
-                </a>
-                <a href="#" class="block py-2.5 px-4 rounded hover:bg-slate-700 transition duration-200">
-                    <i class="fas fa-box mr-2"></i> สินค้า
-                </a>
-                <a href="#" class="block py-2.5 px-4 rounded hover:bg-slate-700 transition duration-200">
-                    <i class="fas fa-chart-line mr-2"></i> รายงาน
-                </a>
-                <a href="#" class="block py-2.5 px-4 rounded hover:bg-slate-700 transition duration-200">
-                    <i class="fas fa-cog mr-2"></i> ตั้งค่า
-                </a>
-            </nav>
-            <div class="p-4 border-t border-slate-700">
-                <button class="w-full bg-red-500 hover:bg-red-600 py-2 rounded transition">
-                    ออกจากระบบ
-                </button>
+        </section>
+
+        <section id="memberView">
+            <div class="search-container" style="display: flex; justify-content: flex-end; margin-bottom: 30px;">
+                <div style="position: relative; width: 320px;">
+                    <i class="fa-solid fa-magnifying-glass" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
+                    <input type="text" id="memberSearch" placeholder="SEARCH OPERATIVES..." onkeyup="filterMembers()" style="width:100%; background:rgba(255,255,255,0.03); border:none; border-bottom:3px solid var(--border-color); padding:12px 15px; color:#fff; font-family:'Rajdhani'; outline:none; font-weight: 700; transition: 0.3s;">
+                </div>
             </div>
-        </aside>
 
-        <main class="flex-grow flex flex-col min-w-0 overflow-y-auto">
-            
-            <header class="bg-white shadow-sm p-4 flex justify-between items-center">
-                <h2 class="text-xl font-semibold text-gray-800">Dashboard Overview</h2>
-                <div class="flex items-center space-x-4">
-                    <span class="text-gray-600">สวัสดี, Admin</span>
-                    <img src="https://ui-avatars.com/api/?name=Admin&background=random" class="w-10 h-10 rounded-full border">
-                </div>
-            </header>
-
-            <div class="p-6 space-y-6">
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
-                        <p class="text-gray-500 text-sm uppercase">ยอดขายวันนี้</p>
-                        <p class="text-2xl font-bold">฿25,400</p>
+            <div id="adminPanel" class="hidden">
+                <div id="adminWrapper">
+                    <div class="admin-header" onclick="toggleAdminPanel()">
+                        <span style="color: var(--primary); font-family: 'Orbitron'; font-size: 0.85rem; letter-spacing: 3px; font-weight: 900;">
+                            <i class="fas fa-shield-alt mr-2"></i> COMMAND CENTER
+                        </span>
+                        <span id="collapseIcon" style="color: #444; font-family: 'Orbitron'; font-size: 0.7rem;">[ - ] HIDE PANEL</span>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
-                        <p class="text-gray-500 text-sm uppercase">ผู้ใช้งานใหม่</p>
-                        <p class="text-2xl font-bold">+120</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-orange-500">
-                        <p class="text-gray-500 text-sm uppercase">รายการค้างส่ง</p>
-                        <p class="text-2xl font-bold">15</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                    <div class="p-4 border-b bg-gray-50 flex justify-between items-center">
-                        <h3 class="font-bold text-gray-700">รายการผู้ใช้งานล่าสุด</h3>
-                        <button class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">เพิ่มข้อมูล</button>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-gray-100 text-gray-600 text-sm uppercase">
-                                    <th class="p-4 border-b">ID</th>
-                                    <th class="p-4 border-b">ชื่อ-นามสกุล</th>
-                                    <th class="p-4 border-b">อีเมล</th>
-                                    <th class="p-4 border-b">สถานะ</th>
-                                    <th class="p-4 border-b text-center">จัดการ</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-gray-700">
-                                <tr class="hover:bg-gray-50 border-b">
-                                    <td class="p-4">#001</td>
-                                    <td class="p-4">สมชาย ใจดี</td>
-                                    <td class="p-4">somchai@example.com</td>
-                                    <td class="p-4"><span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Active</span></td>
-                                    <td class="p-4 text-center">
-                                        <button class="text-blue-500 hover:underline mr-2">แก้ไข</button>
-                                        <button class="text-red-500 hover:underline">ลบ</button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50 border-b">
-                                    <td class="p-4">#002</td>
-                                    <td class="p-4">สมหญิง รักเรียน</td>
-                                    <td class="p-4">somying@example.com</td>
-                                    <td class="p-4"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs">Pending</span></td>
-                                    <td class="p-4 text-center">
-                                        <button class="text-blue-500 hover:underline mr-2">แก้ไข</button>
-                                        <button class="text-red-500 hover:underline">ลบ</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="admin-content admin-form">
+                        <span class="admin-sub-title">SYSTEM CONFIG</span>
+                        <div class="admin-grid">
+                            <input type="text" id="editBrand" placeholder="Web Brand Name">
+                            <select id="editFont">
+                                <option value="'Orbitron'">Font: Orbitron</option>
+                                <option value="'Kanit'">Font: Kanit</option>
+                                <option value="'Rajdhani'">Font: Rajdhani</option>
+                            </select>
+                            <input type="text" id="editBG" placeholder="Background URL">
+                        </div>
+                        <span class="admin-sub-title">MUSIC & COVER</span>
+                        <div class="admin-grid">
+                            <input type="text" id="editMusicTitle" placeholder="Song Name">
+                            <input type="text" id="editMusicArtist" placeholder="Artist">
+                            <input type="text" id="editMusicImg" placeholder="Cover Image URL">
+                            <input type="text" id="editMusicId" placeholder="YouTube Video ID">
+                        </div>
+                        <button class="btn-action" onclick="updateSettings()" style="width:100%; margin-bottom: 35px; background: #222; color: #fff;">SYNC GLOBAL SETTINGS</button>
+                        <span class="admin-sub-title">OPERATIVE MANAGER</span>
+                        <div class="admin-grid">
+                            <input type="hidden" id="editMemberId">
+                            <input type="text" id="newName" placeholder="Full Name">
+                            <input type="text" id="newImg" placeholder="Profile Image URL">
+                            <input type="text" id="newFB" placeholder="Facebook Link">
+                            <select id="newRole">
+                                <option value="founder">Founder</option>
+                                <option value="leader">Leader</option>
+                                <option value="member" selected>Member</option>
+                            </select>
+                        </div>
+                        <div style="display:flex; gap:12px;">
+                            <button onclick="saveToDB()" id="addBtn" class="btn-action" style="flex:1;">ADD OPERATIVE</button>
+                            <button onclick="resetMemberForm()" id="cancelEditBtn" class="hidden" style="background: #333; color: #fff; border: none; padding: 0 25px; border-radius: 8px; cursor: pointer; font-family:'Orbitron'; font-size:0.7rem;">CANCEL</button>
+                        </div>
                     </div>
                 </div>
-
             </div>
-        </main>
+
+            <div id="founderSection">
+                <div class="section-title">FOUNDERS</div>
+                <div class="grid" id="founderGrid"></div>
+            </div>
+            <div id="leaderSection">
+                <div class="section-title">LEADERS</div>
+                <div class="grid" id="leaderGrid"></div>
+            </div>
+            <div id="memberSection">
+                <div class="section-title">MEMBER CALVYN</div>
+                <div class="grid" id="memberGrid"></div>
+            </div>
+        </section>
     </div>
 
+    <div class="bottom-ui">
+        <div class="music-mini-player" id="miniPlayer" onclick="togglePlayer()">
+            <img src="" class="mini-art" id="miniArt" style="width:50px; height:50px; border-radius:8px; object-fit:cover;">
+            <div style="flex:1; padding-left:15px; overflow:hidden;">
+                <span id="displayMiniTitle" style="font-family:'Orbitron'; font-size:0.65rem; color:#fff; display:block; font-weight:900;">STARBOY</span>
+                <span id="displayMiniArtist" style="font-size:0.55rem; color:#777; font-weight: 700;">THE WEEKND</span>
+            </div>
+            <i class="fa-solid fa-caret-up" style="color:#555; font-size: 0.8rem; margin: 0 10px;"></i>
+        </div>
+
+        <div class="full-player" id="fullPlayer">
+            <div style="display:flex; justify-content:space-between; font-size:0.6rem; color:#444; margin-bottom:20px; font-family:'Orbitron'; font-weight: 900;">
+                <span onclick="togglePlayer()" style="cursor:pointer;">[ DISMISS ]</span>
+                <span style="color:var(--danger);">[ LIVE SYNCING ]</span>
+            </div>
+            <img src="" id="fullArt" style="width:100%; border-radius:20px; margin-bottom:25px; box-shadow: 0 20px 60px rgba(0,0,0,0.8);">
+            <div style="text-align:center; margin-bottom:25px;">
+                <h2 id="fullTitle" style="font-family:'Orbitron'; font-size:1.1rem; margin:0; font-weight:900; letter-spacing: 1px;">STARBOY</h2>
+                <p id="fullArtist" style="font-size:0.65rem; color:#888; margin:8px 0 0 0; letter-spacing:3px; font-weight: 700;">THE WEEKND</p>
+            </div>
+            <div style="width:100%; height:3px; background:#1a1a1a; margin-bottom:25px; cursor:pointer;" onclick="seek(event)">
+                <div id="progressLine" style="height:100%; background:var(--danger); width:0%; transition: width 0.3s;"></div>
+            </div>
+            <div style="display:flex; justify-content:center; margin-bottom:30px;">
+                <button onclick="togglePlay()" style="background:#fff; color:#000; width:65px; height:65px; border-radius:50%; border:none; cursor:pointer; transition: 0.3s;"><i class="fa-solid fa-play" id="playIcon" style="font-size: 1.5rem;"></i></button>
+            </div>
+            <input type="range" min="0" max="100" value="20" oninput="changeVolume(this.value)" style="width:100%; accent-color:var(--primary); cursor: pointer;">
+        </div>
+    </div>
+
+    <div id="yt-player" style="display:none;"></div>
+
+    <script>
+        const firebaseConfig = { databaseURL: "https://calvyn-999ea-default-rtdb.asia-southeast1.firebasedatabase.app/" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let isAdmin = false, player, isPlaying = false;
+
+        function showToast(msg) {
+            const t = document.createElement('div'); t.className = 'toast'; t.innerText = msg;
+            document.getElementById('toast-container').appendChild(t);
+            setTimeout(() => t.classList.add('show'), 50);
+            setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 600); }, 3000);
+        }
+
+        function toggleAdminPanel() {
+            const wrapper = document.getElementById('adminWrapper');
+            wrapper.classList.toggle('collapsed');
+            document.getElementById('collapseIcon').innerText = wrapper.classList.contains('collapsed') ? "[ + ] SHOW PANEL" : "[ - ] HIDE PANEL";
+        }
+
+        function filterMembers() {
+            const val = document.getElementById('memberSearch').value.toLowerCase();
+            document.querySelectorAll('.member-card').forEach(card => {
+                const name = card.querySelector('.name').innerText.toLowerCase();
+                card.style.display = name.includes(val) ? 'flex' : 'none';
+            });
+        }
+
+        // YouTube API
+        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
+        document.head.append(tag);
+
+        function onYouTubeIframeAPIReady() {
+            db.ref('settings').once('value', s => {
+                const config = s.val() || {};
+                const vidId = config.musicUrl || 'XXYlFuWEuKI';
+                player = new YT.Player('yt-player', {
+                    videoId: vidId, playerVars: { 'autoplay': 1, 'playlist': vidId },
+                    events: {
+                        'onReady': (e) => { e.target.setVolume(20); setInterval(updateProgress, 500); },
+                        'onStateChange': (e) => {
+                            isPlaying = (e.data == YT.PlayerState.PLAYING);
+                            document.getElementById('playIcon').className = isPlaying ? "fa-solid fa-pause" : "fa-solid fa-play";
+                        }
+                    }
+                });
+            });
+        }
+
+        function togglePlayer() { const f = document.getElementById('fullPlayer'); f.style.display = f.style.display === "flex" ? "none" : "flex"; }
+        function togglePlay() { isPlaying ? player.pauseVideo() : player.playVideo(); }
+        function changeVolume(v) { if(player) player.setVolume(v); }
+        function seek(e) { player.seekTo(player.getDuration() * (e.offsetX / e.currentTarget.offsetWidth)); }
+        function updateProgress() { if (player && player.getCurrentTime) document.getElementById('progressLine').style.width = (player.getCurrentTime() / player.getDuration()) * 100 + "%"; }
+
+        // Sync Data
+        db.ref('settings').on('value', (snapshot) => {
+            const s = snapshot.val() || {};
+            document.getElementById('brand-name').innerText = s.brandName || "CALVYN";
+            document.getElementById('brand-name').style.fontFamily = s.fontFamily || "'Orbitron'";
+            document.body.style.backgroundImage = s.bgUrl ? `url('${s.bgUrl}')` : "url('https://img1.pic.in.th/images/calvyn.png')";
+            
+            const mTitle = s.musicTitle || "STARBOY", mArtist = s.musicArtist || "THE WEEKND", mImg = s.musicImg || `https://i.ytimg.com/vi/${s.musicUrl}/maxresdefault.jpg`;
+            document.getElementById('displayMiniTitle').innerText = mTitle;
+            document.getElementById('displayMiniArtist').innerText = mArtist;
+            document.getElementById('miniArt').src = mImg; document.getElementById('fullArt').src = mImg;
+            document.getElementById('fullTitle').innerText = mTitle; document.getElementById('fullArtist').innerText = mArtist;
+
+            if(s.musicUrl && player && player.loadVideoById && player.getVideoData() && player.getVideoData().video_id !== s.musicUrl) player.loadVideoById(s.musicUrl);
+        });
+
+        db.ref('roster').on('value', (snapshot) => {
+            const grids = { founder: document.getElementById('founderGrid'), leader: document.getElementById('leaderGrid'), member: document.getElementById('memberGrid') };
+            Object.values(grids).forEach(g => g.innerHTML = "");
+            const data = snapshot.val(); if (!data) return;
+            Object.keys(data).forEach((id, index) => {
+                const item = data[id];
+                const card = document.createElement('div');
+                card.className = 'member-card'; card.onclick = () => { if(isAdmin) prepareEditMember(id, item); };
+                card.innerHTML = `
+                    <div class="avatar-box" style="background-image: url('${item.img || ''}')"></div>
+                    <div class="status-pulse"></div>
+                    <div class="info">
+                        <span class="role-tag role-${item.role}">${item.role.toUpperCase()}</span>
+                        <h4 class="name">${item.name}</h4>
+                        <a href="${item.fb}" target="_blank" class="fb-link">VIEW FACEBOOK</a>
+                    </div>
+                    ${isAdmin ? `<button class="delete-btn" style="position: absolute; top: 15px; right: 15px; color: var(--danger); background:none; border:none; cursor:pointer;" onclick="event.stopPropagation(); deleteItem('${id}')"><i class="fas fa-trash-alt"></i></button>` : ''}
+                `;
+                if(grids[item.role]) { grids[item.role].appendChild(card); setTimeout(() => card.classList.add('show'), index * 80); }
+            });
+        });
+
+        function updateSettings() {
+            db.ref('settings').update({
+                brandName: document.getElementById('editBrand').value || "CALVYN",
+                fontFamily: document.getElementById('editFont').value,
+                bgUrl: document.getElementById('editBG').value,
+                musicUrl: document.getElementById('editMusicId').value || "XXYlFuWEuKI",
+                musicTitle: document.getElementById('editMusicTitle').value || "STARBOY",
+                musicArtist: document.getElementById('editMusicArtist').value || "THE WEEKND",
+                musicImg: document.getElementById('editMusicImg').value
+            });
+            showToast("CORE SYSTEM SYNCED");
+        }
+
+        function prepareEditMember(id, data) {
+            document.getElementById('editMemberId').value = id;
+            document.getElementById('newName').value = data.name;
+            document.getElementById('newImg').value = data.img;
+            document.getElementById('newFB').value = data.fb;
+            document.getElementById('newRole').value = data.role;
+            document.getElementById('addBtn').innerText = "UPDATE OPERATIVE";
+            document.getElementById('cancelEditBtn').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetMemberForm() {
+            document.getElementById('editMemberId').value = "";
+            ['newName','newImg','newFB'].forEach(id => document.getElementById(id).value = "");
+            document.getElementById('addBtn').innerText = "ADD OPERATIVE";
+            document.getElementById('cancelEditBtn').classList.add('hidden');
+        }
+
+        function saveToDB() {
+            const id = document.getElementById('editMemberId').value, name = document.getElementById('newName').value;
+            const data = { name, img: document.getElementById('newImg').value, fb: document.getElementById('newFB').value, role: document.getElementById('newRole').value };
+            if (name) {
+                if(id) db.ref('roster/' + id).update(data); else db.ref('roster').push(data);
+                showToast(id ? "OPERATIVE UPDATED" : "OPERATIVE REGISTERED"); resetMemberForm();
+            }
+        }
+
+        function showView(view) {
+            document.getElementById('memberView').classList.toggle('hidden', view !== 'memberView');
+            document.getElementById('adminLoginView').classList.toggle('hidden', view !== 'adminLoginView');
+            document.getElementById('navMembers').classList.toggle('active', view === 'memberView');
+            document.getElementById('navAdmin').classList.toggle('active', view === 'adminLoginView');
+        }
+
+        function handleLogin() {
+            if (document.getElementById('loginUser').value === "calvyn" && document.getElementById('loginPass').value === "0808") {
+                isAdmin = true; document.getElementById('adminPanel').classList.remove('hidden'); showView('memberView'); showToast("ACCESS GRANTED");
+            } else showToast("INVALID PASSKEY");
+        }
+
+        function deleteItem(id) { if (confirm("TERMINATE OPERATIVE?")) db.ref('roster/' + id).remove(); }
+        document.addEventListener('click', () => { if(player && !isPlaying) player.playVideo(); }, { once: true });
+    </script>
 </body>
 </html>
