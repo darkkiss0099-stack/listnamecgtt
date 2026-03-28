@@ -35,17 +35,18 @@
             overflow-x: hidden;
         }
 
-        /* Jumpscare Overlay */
-        #jumpscare-overlay {
+        /* Jumpscare Video Overlay */
+        #video-jumpscare {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: #000;
-            z-index: 99999;
+            z-index: 999999;
             display: none;
-            justify-content: center;
-            align-items: center;
+            pointer-events: none;
         }
-        #jumpscare-img { width: 100%; height: 100%; object-fit: cover; }
+        #video-jumpscare iframe {
+            width: 100%; height: 100%; border: none;
+        }
 
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
@@ -130,15 +131,6 @@
             z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-            display: none; align-items: center; justify-content: center;
-            z-index: 2000; backdrop-filter: blur(10px);
-        }
-        .custom-modal {
-            background: #151518; border: 1px solid var(--primary); padding: 30px;
-            border-radius: 20px; max-width: 400px; width: 95%; text-align: center;
-        }
         .hidden { display: none !important; }
 
         .key-display {
@@ -150,10 +142,7 @@
 </head>
 <body id="mainBody">
 
-    <div id="jumpscare-overlay">
-        <img id="jumpscare-img" src="https://i.pinimg.com/originals/7b/2e/8b/7b2e8b2b7b2e8b2b7b2e8b2b7b2e8b2b.gif" alt="Ghost">
-    </div>
-    <audio id="scream-sound" src="https://www.soundboard.com/handler/DownLoadTrack.ashx?cliptitle=Scream&filename=22/227415-38501235-9852-4424-8b63-12502621062b.mp3"></audio>
+    <div id="video-jumpscare"></div>
 
     <nav>
         <div id="brand-name">ONELESS CGT</div>
@@ -168,14 +157,14 @@
             <div style="max-width: 400px; margin: auto; text-align: center;" class="glass-panel">
                 <i class="fas fa-key" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
                 <h2>ACCESS KEY</h2>
-                <input type="text" id="accessKeyInput" placeholder="กรุณาใส่ KEY เพื่อเข้าสู่ระบบ" style="margin-bottom: 20px; text-align: center;">
+                <input type="text" id="accessKeyInput" placeholder="ใส่ KEY เพื่อเข้าสู่ระบบ" style="margin-bottom: 20px; text-align: center;">
                 <button onclick="handleLoginByKey()" class="btn-action" style="margin-bottom: 25px;">เข้าสู่ระบบ</button>
                 
                 <hr style="opacity: 0.1; margin-bottom: 20px;">
                 
-                <p style="font-size: 0.8rem; opacity: 0.6;">ไม่มี KEY? ต้องได้รับอนุญาตก่อนสร้าง</p>
-                <input type="password" id="genPass" placeholder="รหัสสร้าง KEY (xxxxx)" style="margin-bottom: 10px; text-align: center;">
-                <button onclick="generateNewKey()" class="btn-action btn-secondary" style="width: 100%; font-size: 0.8rem;">สร้าง ACCESS KEY ใหม่</button>
+                <p style="font-size: 0.8rem; opacity: 0.6;">สร้าง KEY ใหม่ (ต้องใส่รหัสยืนยัน)</p>
+                <input type="password" id="genPass" placeholder="รหัสยืนยัน (changretta790)" style="margin-bottom: 10px; text-align: center;">
+                <button onclick="generateNewKey()" class="btn-action btn-secondary" style="width: 100%; font-size: 0.8rem;">สร้าง ACCESS KEY</button>
                 <div id="newKeyResult" class="hidden key-display"></div>
             </div>
         </section>
@@ -183,7 +172,7 @@
         <section id="memberView" class="fade-in">
             <div id="adminPanel" class="hidden">
                 <div class="glass-panel" style="border-left: 5px solid var(--primary);">
-                    <h3 style="color: var(--primary);"><i class="fas fa-tools"></i> ระบบจัดการ (Auto-Save)</h3>
+                    <h3 style="color: var(--primary);"><i class="fas fa-tools"></i> ระบบจัดการ (Real-time)</h3>
                     
                     <div class="admin-grid" style="margin-bottom: 20px;">
                         <div>
@@ -195,12 +184,12 @@
                             <input type="text" id="configBG" placeholder="https://..." onchange="updateSetting('bg', this.value)">
                         </div>
                         <div>
-                            <label>ชื่อหัวข้อ Founder</label>
-                            <input type="text" id="configHeadFounder" oninput="updateSetting('headFounder', this.value)">
+                            <label>หัวข้อ Founder</label>
+                            <input type="text" id="configHeadFounder" placeholder="FOUNDERS" oninput="updateSetting('headFounder', this.value)">
                         </div>
                         <div>
-                            <label>ชื่อหัวข้อ Leader</label>
-                            <input type="text" id="configHeadLeader" oninput="updateSetting('headLeader', this.value)">
+                            <label>หัวข้อ Leader</label>
+                            <input type="text" id="configHeadLeader" placeholder="LEADERS" oninput="updateSetting('headLeader', this.value)">
                         </div>
                     </div>
 
@@ -255,16 +244,19 @@
             setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 3000);
         }
 
+        // --- Video Jumpscare Function ---
         function triggerJumpscare() {
-            const overlay = document.getElementById('jumpscare-overlay');
-            const sound = document.getElementById('scream-sound');
-            overlay.style.display = 'flex';
+            const container = document.getElementById('video-jumpscare');
+            // นาทีที่ 0.13 คือวินาทีที่ 13 (start=13)
+            container.innerHTML = `<iframe src="https://www.youtube.com/embed/u8UdAAX_n28?autoplay=1&controls=0&start=13&mute=0" allow="autoplay"></iframe>`;
+            container.style.display = 'block';
             document.body.classList.add('shaking');
-            sound.play().catch(()=>{});
+
             setTimeout(() => {
-                overlay.style.display = 'none';
+                container.style.display = 'none';
+                container.innerHTML = '';
                 document.body.classList.remove('shaking');
-            }, 1000);
+            }, 4000); // แสดงผล 4 วินาทีแล้วหายไป
         }
 
         function showView(v) {
@@ -272,20 +264,19 @@
             document.getElementById('adminLoginView').classList.toggle('hidden', v !== 'adminLoginView');
         }
 
-        // --- NEW KEY SYSTEM ---
+        // --- KEY SYSTEM ---
         function generateNewKey() {
             const pass = document.getElementById('genPass').value;
             if(pass === "changretta790") {
                 const newKey = 'KEY-' + Math.random().toString(36).substr(2, 9).toUpperCase();
                 db.ref('validKeys/' + newKey).set(true);
                 const res = document.getElementById('newKeyResult');
-                res.innerHTML = `สร้างสำเร็จ! กรุณาคัดลอก KEY นี้:<br><strong>${newKey}</strong>`;
+                res.innerHTML = `คัดลอก KEY นี้:<br><strong>${newKey}</strong>`;
                 res.classList.remove('hidden');
                 document.getElementById('genPass').value = "";
-                showToast("สร้าง Access Key สำเร็จ");
+                showToast("สร้าง KEY สำเร็จ");
             } else {
                 triggerJumpscare();
-                showToast("รหัสผ่านไม่ถูกต้อง!");
             }
         }
 
@@ -299,18 +290,17 @@
                     document.getElementById('adminPanel').classList.remove('hidden');
                     document.getElementById('navAdmin').innerHTML = '<i class="fas fa-sign-out-alt"></i> LOGOUT';
                     showView('memberView');
-                    showToast("เข้าสู่ระบบแอดมินสำเร็จ");
+                    showToast("ยินดีต้อนรับ แอดมิน!");
                     renderRoster();
                 } else {
                     triggerJumpscare();
-                    showToast("KEY ไม่ถูกต้องหรือหมดอายุ!");
                 }
             });
         }
 
         function checkAdminStatus() { isAdmin ? location.reload() : showView('adminLoginView'); }
 
-        // --- FIXED SETTINGS SYSTEM ---
+        // --- SETTINGS (FIXED) ---
         function updateSetting(key, value) {
             if(!isAdmin) return;
             db.ref('settings/' + key).set(value);
@@ -326,17 +316,13 @@
                 document.body.style.backgroundImage = `url('${s.bg}')`;
                 document.getElementById('configBG').value = s.bg;
             }
-            if(s.headFounder) {
-                document.getElementById('titleFounder').innerText = s.headFounder;
-                document.getElementById('configHeadFounder').value = s.headFounder;
-            }
-            if(s.headLeader) {
-                document.getElementById('titleLeader').innerText = s.headLeader;
-                document.getElementById('configHeadLeader').value = s.headLeader;
-            }
+            document.getElementById('titleFounder').innerText = s.headFounder || "FOUNDERS";
+            document.getElementById('configHeadFounder').value = s.headFounder || "";
+            document.getElementById('titleLeader').innerText = s.headLeader || "LEADERS";
+            document.getElementById('configHeadLeader').value = s.headLeader || "";
         });
 
-        // --- ROSTER SYSTEM ---
+        // --- ROSTER ---
         function renderRoster() {
             db.ref('roster').on('value', snap => {
                 const grids = { founder: 'founderGrid', leader: 'leaderGrid', member: 'memberGrid' };
@@ -356,8 +342,8 @@
                         </div>
                         ${isAdmin ? `
                         <div class="admin-controls">
-                            <button class="ctrl-btn edit" onclick="prepareEdit('${id}', '${item.name}', '${item.img}', '${item.fb}', '${item.role}')"><i class="fas fa-edit"></i></button>
-                            <button class="ctrl-btn delete" onclick="deleteMember('${id}')"><i class="fas fa-trash-alt"></i></button>
+                            <button class="ctrl-btn" onclick="prepareEdit('${id}', '${item.name}', '${item.img}', '${item.fb}', '${item.role}')"><i class="fas fa-edit"></i></button>
+                            <button class="ctrl-btn" onclick="deleteMember('${id}')"><i class="fas fa-trash-alt"></i></button>
                         </div>` : ''}
                     `;
                     if(grids[item.role]) document.getElementById(grids[item.role]).appendChild(card);
@@ -377,7 +363,7 @@
             if(!memberData.name) return showToast("กรุณากรอกชื่อ");
             if(id) db.ref('roster/' + id).update(memberData);
             else db.ref('roster').push(memberData);
-            showToast("บันทึกสมาชิกสำเร็จ");
+            showToast("สำเร็จ");
             resetForm();
         }
 
@@ -392,10 +378,7 @@
         }
 
         function deleteMember(id) {
-            if(confirm("ลบสมาชิกรายนี้?")) {
-                db.ref('roster/' + id).remove();
-                showToast("ลบสำเร็จ");
-            }
+            if(confirm("ลบ?")) db.ref('roster/' + id).remove();
         }
 
         function resetForm() {
