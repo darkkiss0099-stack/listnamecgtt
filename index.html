@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONELESS CGT</title>
+    <title>ONELESS CGT - ADMIN SYSTEM</title>
     
     <link rel="icon" type="image/png" href="https://img1.pic.in.th/images/cgtlogo2.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,7 +16,7 @@
         :root {
             --primary: #f3d48b;
             --bg-dark: #0a0a0b;
-            --card-bg: rgba(20, 20, 25, 0.8);
+            --card-bg: #0f0f11; /* ปรับสีการ์ดให้เข้มตามรูป */
             --border-color: rgba(255, 255, 255, 0.1);
             --danger: #ff4757;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -36,11 +36,11 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .fade-in { animation: fadeIn 0.4s ease forwards; }
+        .fade-in { animation: fadeIn 0.5s ease forwards; }
 
         nav { 
             display: flex; justify-content: space-between; padding: 15px 5%; 
@@ -52,7 +52,7 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
 
         .glass-panel {
-            background: var(--card-bg);
+            background: rgba(20, 20, 25, 0.7);
             backdrop-filter: blur(10px);
             border: 1px solid var(--border-color);
             border-radius: 15px;
@@ -65,90 +65,90 @@
         input, select { 
             background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); padding: 12px; 
             color: #fff; border-radius: 8px; font-family: 'Kanit'; outline: none; width: 100%;
+            transition: var(--transition);
         }
-        input:focus { border-color: var(--primary); }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(243, 212, 139, 0.2); }
+        label { font-size: 0.8rem; color: var(--primary); margin-bottom: 8px; display: block; opacity: 0.8; }
 
         .btn-action { 
             background: var(--primary); color: #000; border: none; padding: 12px 25px; 
             border-radius: 8px; font-weight: 700; font-family: 'Orbitron'; cursor: pointer; 
             transition: var(--transition); display: inline-flex; align-items: center; gap: 8px;
+            justify-content: center;
         }
-        .btn-action:hover { transform: translateY(-2px); opacity: 0.9; }
+        .btn-action:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(243, 212, 139, 0.3); }
         .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
 
-        /* --- Member Card (Updated to Match Image) --- */
+        .section-title { 
+            font-family: 'Orbitron'; font-size: 1.1rem; font-weight: 900; 
+            letter-spacing: 5px; color: #fff; margin: 50px 0 20px; 
+            display: flex; align-items: center; gap: 15px;
+        }
+        .section-title::after { content: ""; height: 1px; flex-grow: 1; background: linear-gradient(90deg, var(--primary), transparent); }
+
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
         
+        /* --- Member Card (Matched to Image) --- */
         .member-card {
-            background: #0f0f11; /* พื้นหลังเข้มตามรูป */
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            border-radius: 18px;
-            position: relative;
-            transition: var(--transition);
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            padding: 20px; display: flex; align-items: center; gap: 15px;
+            border-radius: 18px; position: relative; transition: var(--transition);
         }
         
         .avatar-box { 
-            width: 75px; height: 75px; 
-            background-size: cover; background-position: center; 
-            border-radius: 50%; border: 2px solid #fff; 
-            flex-shrink: 0; margin-right: 20px;
+            width: 75px; height: 75px; background-size: cover; 
+            background-position: center; border-radius: 50%; 
+            border: 2px solid #fff; flex-shrink: 0;
         }
-
-        .member-info { flex-grow: 1; }
 
         .role-tag { 
             font-family: 'Orbitron'; font-size: 11px; font-weight: 900; 
-            padding: 3px 12px; border-radius: 50px; 
-            background: #fff; color: #000; /* ป้ายขาวตัวดำตามรูป */
-            margin-bottom: 8px; display: inline-block;
-            text-transform: uppercase;
+            padding: 3px 12px; border-radius: 50px; background: #fff; color: #000;
+            margin-bottom: 8px; display: inline-block; text-transform: uppercase;
         }
 
         .member-name {
-            font-family: 'Orbitron'; font-size: 22px; font-weight: 700;
-            color: #fff; margin-bottom: 4px; line-height: 1;
+            font-weight: 700; font-family: 'Orbitron'; font-size: 1.3rem; color: #fff;
+            line-height: 1.2; margin-bottom: 4px;
         }
 
         .fb-link {
             font-size: 12px; color: #888; text-decoration: none;
-            font-family: 'Orbitron'; letter-spacing: 1px;
+            font-family: 'Orbitron'; letter-spacing: 1px; opacity: 0.8;
         }
 
-        /* --- Admin Controls (Matched Image) --- */
+        /* --- Admin Controls Layout (Matched to Image) --- */
         .admin-controls {
             display: flex; flex-direction: column; 
             justify-content: space-around;
-            height: 80px; padding-left: 20px;
-            margin-left: 15px;
-            border-left: 1px solid rgba(255,255,255,0.2); /* เส้นคั่นแนวตั้ง */
+            height: 70px; padding-left: 20px; margin-left: auto;
+            border-left: 1px solid rgba(255,255,255,0.15); /* เส้นคั่นแนวตั้งตามรูป */
         }
         
         .ctrl-btn {
             background: none; border: none; cursor: pointer; 
-            font-size: 20px; transition: var(--transition);
+            font-size: 1.2rem; transition: var(--transition); padding: 5px;
         }
         .ctrl-btn.edit { color: #fff; } /* ดินสอสีขาว */
         .ctrl-btn.delete { color: var(--danger); } /* ถังขยะสีแดง */
-        .ctrl-btn:hover { transform: scale(1.15); }
+        .ctrl-btn:hover { transform: scale(1.2); }
 
         .hidden { display: none !important; }
-        
         .toast { 
             position: fixed; top: 20px; right: 20px; background: var(--primary); 
-            color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 900; z-index: 10000;
+            color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 900; 
+            z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-            display: none; align-items: center; justify-content: center; z-index: 2000;
+            display: none; align-items: center; justify-content: center;
+            z-index: 2000; backdrop-filter: blur(10px);
         }
-        .custom-modal { background: #151518; border: 1px solid var(--primary); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; }
-
-        .section-title { font-family: 'Orbitron'; font-size: 1.1rem; letter-spacing: 5px; margin: 40px 0 20px; display: flex; align-items: center; gap: 15px; }
-        .section-title::after { content: ""; height: 1px; flex-grow: 1; background: linear-gradient(90deg, var(--primary), transparent); }
+        .custom-modal {
+            background: #151518; border: 1px solid var(--primary); padding: 30px;
+            border-radius: 20px; max-width: 400px; width: 95%; text-align: center;
+        }
     </style>
 </head>
 <body id="mainBody">
@@ -156,16 +156,16 @@
     <nav>
         <div id="brand-name">ONELESS CGT</div>
         <div style="display: flex; gap: 10px;">
-            <button onclick="showView('memberView')" class="btn-action btn-secondary">HOME</button>
-            <button onclick="checkAdminStatus()" id="navAdmin" class="btn-action">ADMIN</button>
+            <button onclick="showView('memberView')" class="btn-action btn-secondary"><i class="fas fa-home"></i> HOME</button>
+            <button onclick="checkAdminStatus()" id="navAdmin" class="btn-action"><i class="fas fa-user-shield"></i> ADMIN</button>
         </div>
     </nav>
 
     <div id="uiModal" class="modal-overlay">
         <div class="custom-modal">
-            <h3 id="uiModalTitle">ยืนยัน</h3>
-            <p id="uiModalDesc">ยืนยันการดำเนินการ?</p>
-            <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
+            <h3 id="uiModalTitle" style="color:var(--primary);">ยืนยัน</h3>
+            <p id="uiModalDesc" style="color:#ccc; margin-bottom:25px;">ยืนยันการดำเนินการ?</p>
+            <div style="display:flex; gap:10px; justify-content:center;">
                 <button id="uiModalConfirm" class="btn-action">ตกลง</button>
                 <button onclick="closeUIModal()" class="btn-action btn-secondary">ยกเลิก</button>
             </div>
@@ -175,22 +175,23 @@
     <div class="container">
         <section id="adminLoginView" class="hidden fade-in" style="padding-top: 10vh;">
             <div style="max-width: 400px; margin: auto; text-align: center;" class="glass-panel">
-                <h2 style="font-family: 'Orbitron'; color: var(--primary);">LOGIN</h2>
-                <input type="text" id="adminName" placeholder="ADMIN NAME" style="margin-bottom: 10px; text-align: center;">
-                <input type="password" id="loginPass" placeholder="PASSWORD" style="margin-bottom: 20px; text-align: center;">
-                <button onclick="handleLogin()" class="btn-action" style="width: 100%;">LOGIN SYSTEM</button>
+                <i class="fas fa-user-lock" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+                <h2 style="font-family: 'Kanit';">ADMIN LOGIN</h2>
+                <input type="text" id="adminName" placeholder="ชื่อผู้ใช้งาน" style="margin-bottom: 10px; text-align: center;">
+                <input type="password" id="loginPass" placeholder="รหัสผ่าน" style="margin-bottom: 20px; text-align: center;">
+                <button onclick="handleLogin()" class="btn-action" style="width: 100%;">เข้าสู่ระบบ</button>
             </div>
         </section>
 
         <section id="memberView" class="fade-in">
             <div id="adminPanel" class="hidden">
-                <div class="glass-panel">
-                    <h3 style="color: var(--primary); margin-top: 0;">CONTROL PANEL</h3>
+                <div class="glass-panel" style="border-left: 5px solid var(--primary);">
+                    <h3 style="color: var(--primary); margin: 0 0 20px 0;"><i class="fas fa-tools"></i> ส่วนการจัดการระบบ</h3>
                     <div class="admin-grid">
                         <input type="hidden" id="editMemberId">
-                        <input type="text" id="newName" placeholder="ชื่อ">
-                        <input type="text" id="newImg" placeholder="ลิ้งก์รูป">
-                        <input type="text" id="newFB" placeholder="Facebook Link">
+                        <input type="text" id="newName" placeholder="ชื่อ-นามสกุล">
+                        <input type="text" id="newImg" placeholder="ลิ้งก์รูปโปรไฟล์">
+                        <input type="text" id="newFB" placeholder="ลิ้งก์ Facebook">
                         <select id="newRole">
                             <option value="founder">Founder</option>
                             <option value="leader">Leader</option>
@@ -198,23 +199,23 @@
                         </select>
                     </div>
                     <div style="margin-top: 15px; display: flex; gap: 10px;">
-                        <button onclick="saveMember()" id="saveBtn" class="btn-action">SAVE MEMBER</button>
-                        <button onclick="resetForm()" class="btn-action btn-secondary">RESET</button>
+                        <button onclick="saveMember()" id="saveBtn" class="btn-action">บันทึกข้อมูล</button>
+                        <button onclick="resetForm()" class="btn-action btn-secondary">ล้างฟอร์ม</button>
                     </div>
                 </div>
             </div>
 
             <div id="rosterDisplay">
                 <div id="section-founder">
-                    <div class="section-title">FOUNDERS</div>
+                    <div class="section-title" id="titleFounder">FOUNDERS</div>
                     <div class="grid" id="founderGrid"></div>
                 </div>
                 <div id="section-leader">
-                    <div class="section-title">LEADERS</div>
+                    <div class="section-title" id="titleLeader">LEADERS</div>
                     <div class="grid" id="leaderGrid"></div>
                 </div>
                 <div id="section-member">
-                    <div class="section-title">MEMBERS</div>
+                    <div class="section-title" id="titleMember">MEMBERS</div>
                     <div class="grid" id="memberGrid"></div>
                 </div>
             </div>
@@ -252,11 +253,11 @@
             if(pass === "cgtteam790" || pass === "changretta790") {
                 isAdmin = true;
                 document.getElementById('adminPanel').classList.remove('hidden');
-                document.getElementById('navAdmin').innerText = 'LOGOUT';
+                document.getElementById('navAdmin').innerHTML = '<i class="fas fa-sign-out-alt"></i> LOGOUT';
                 showView('memberView');
-                showToast("Admin Logged In");
+                showToast("Login Success");
             } else {
-                showToast("Wrong Password!");
+                showToast("Incorrect Password!");
             }
         }
 
@@ -276,7 +277,7 @@
                 card.className = 'member-card fade-in';
                 card.innerHTML = `
                     <div class="avatar-box" style="background-image: url('${item.img || ''}')"></div>
-                    <div class="member-info">
+                    <div style="flex:1">
                         <span class="role-tag">${item.role}</span>
                         <div class="member-name">${item.name}</div>
                         <a href="${item.fb}" target="_blank" class="fb-link">FACEBOOK</a>
@@ -304,13 +305,13 @@
                 fb: document.getElementById('newFB').value,
                 role: document.getElementById('newRole').value
             };
-            if(!data.name) return showToast("Please enter name");
+            if(!data.name) return showToast("กรุณากรอกชื่อ");
 
-            openUIModal("Save Changes", `Confirm saving ${data.name}?`, () => {
+            openUIModal("ยืนยัน", "ต้องการบันทึกข้อมูลหรือไม่?", () => {
                 if(id) db.ref('roster/' + id).update(data);
                 else db.ref('roster').push(data);
                 resetForm();
-                showToast("Success!");
+                showToast("บันทึกสำเร็จ");
             });
         }
 
@@ -320,21 +321,21 @@
             document.getElementById('newImg').value = data.img;
             document.getElementById('newFB').value = data.fb;
             document.getElementById('newRole').value = data.role;
-            document.getElementById('saveBtn').innerText = "UPDATE MEMBER";
+            document.getElementById('saveBtn').innerText = "อัปเดตข้อมูล";
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function askDeleteMember(id) {
-            openUIModal("Delete", "Are you sure you want to delete?", () => {
+            openUIModal("ลบสมาชิก", "คุณต้องการลบสมาชิกนี้ใช่หรือไม่?", () => {
                 db.ref('roster/' + id).remove();
-                showToast("Deleted");
+                showToast("ลบสำเร็จ");
             });
         }
 
         function resetForm() {
             document.getElementById('editMemberId').value = "";
             ['newName','newImg','newFB'].forEach(i => document.getElementById(i).value = "");
-            document.getElementById('saveBtn').innerText = "SAVE MEMBER";
+            document.getElementById('saveBtn').innerText = "บันทึกข้อมูล";
         }
     </script>
 </body>
