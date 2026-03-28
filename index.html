@@ -33,7 +33,6 @@
             font-family: 'Rajdhani', 'Kanit', sans-serif;
             margin: 0; min-height: 100vh;
             overflow-x: hidden;
-            transition: background 0.5s ease;
         }
 
         /* Jumpscare Overlay */
@@ -56,9 +55,6 @@
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
         .shaking { animation: shake 0.1s infinite; }
-
-        .fade-in { animation: fadeIn 0.5s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         nav { 
             display: flex; justify-content: space-between; padding: 15px 5%; 
@@ -86,16 +82,15 @@
             transition: var(--transition);
         }
         input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(243, 212, 139, 0.2); }
-        label { font-size: 0.8rem; color: var(--primary); margin-bottom: 8px; display: block; opacity: 0.8; }
 
         .btn-action { 
             background: var(--primary); color: #000; border: none; padding: 12px 25px; 
             border-radius: 8px; font-weight: 700; font-family: 'Orbitron'; cursor: pointer; 
             transition: var(--transition); display: inline-flex; align-items: center; gap: 8px;
-            justify-content: center;
+            justify-content: center; width: 100%;
         }
         .btn-action:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(243, 212, 139, 0.3); }
-        .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; width: auto; }
 
         .section-title { 
             font-family: 'Orbitron'; font-size: 1.1rem; font-weight: 900; 
@@ -112,7 +107,6 @@
             border-radius: 12px; position: relative; transition: var(--transition);
             backdrop-filter: blur(5px);
         }
-        .member-card:hover { border-color: var(--primary); background: rgba(255,255,255,0.05); }
         
         .avatar-box { 
             width: 65px; height: 65px; background-size: cover; 
@@ -126,13 +120,9 @@
             margin-bottom: 5px; display: inline-block;
         }
 
-        .admin-controls {
-            display: flex; flex-direction: column; gap: 8px;
-            padding-left: 10px; border-left: 1px solid var(--border-color);
-        }
-        .ctrl-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; transition: var(--transition); }
-        .ctrl-btn.edit { color: var(--primary); }
-        .ctrl-btn.delete { color: var(--danger); }
+        .admin-controls { display: flex; flex-direction: column; gap: 8px; padding-left: 10px; border-left: 1px solid var(--border-color); }
+        .ctrl-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; transition: var(--transition); color: #fff; }
+        .ctrl-btn:hover { color: var(--primary); }
 
         .toast { 
             position: fixed; top: 20px; right: 20px; background: var(--primary); 
@@ -150,6 +140,12 @@
             border-radius: 20px; max-width: 400px; width: 95%; text-align: center;
         }
         .hidden { display: none !important; }
+
+        .key-display {
+            background: rgba(255,255,255,0.05); padding: 10px; border-radius: 5px;
+            margin-top: 15px; font-family: monospace; color: var(--primary);
+            border: 1px dashed var(--primary); word-break: break-all;
+        }
     </style>
 </head>
 <body id="mainBody">
@@ -167,31 +163,27 @@
         </div>
     </nav>
 
-    <div id="uiModal" class="modal-overlay">
-        <div class="custom-modal">
-            <h3 id="uiModalTitle" style="color:var(--primary);">ยืนยัน</h3>
-            <p id="uiModalDesc" style="color:#ccc; margin-bottom:25px;">ยืนยันการดำเนินการ?</p>
-            <div style="display:flex; gap:10px; justify-content:center;">
-                <button id="uiModalConfirm" class="btn-action">ตกลง</button>
-                <button onclick="closeUIModal()" class="btn-action btn-secondary">ยกเลิก</button>
-            </div>
-        </div>
-    </div>
-
     <div class="container">
-        <section id="adminLoginView" class="hidden fade-in" style="padding-top: 10vh;">
+        <section id="adminLoginView" class="hidden fade-in" style="padding-top: 5vh;">
             <div style="max-width: 400px; margin: auto; text-align: center;" class="glass-panel">
-                <i class="fas fa-user-lock" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
-                <h2>ADMIN LOGIN</h2>
-                <input type="password" id="loginPass" placeholder="รหัสผ่าน" style="margin-bottom: 20px; text-align: center;">
-                <button onclick="handleLogin()" class="btn-action" style="width: 100%;">เข้าสู่ระบบ</button>
+                <i class="fas fa-key" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+                <h2>ACCESS KEY</h2>
+                <input type="text" id="accessKeyInput" placeholder="กรุณาใส่ KEY เพื่อเข้าสู่ระบบ" style="margin-bottom: 20px; text-align: center;">
+                <button onclick="handleLoginByKey()" class="btn-action" style="margin-bottom: 25px;">เข้าสู่ระบบ</button>
+                
+                <hr style="opacity: 0.1; margin-bottom: 20px;">
+                
+                <p style="font-size: 0.8rem; opacity: 0.6;">ไม่มี KEY? ต้องได้รับอนุญาตก่อนสร้าง</p>
+                <input type="password" id="genPass" placeholder="รหัสสร้าง KEY (changretta790)" style="margin-bottom: 10px; text-align: center;">
+                <button onclick="generateNewKey()" class="btn-action btn-secondary" style="width: 100%; font-size: 0.8rem;">สร้าง ACCESS KEY ใหม่</button>
+                <div id="newKeyResult" class="hidden key-display"></div>
             </div>
         </section>
 
         <section id="memberView" class="fade-in">
             <div id="adminPanel" class="hidden">
                 <div class="glass-panel" style="border-left: 5px solid var(--primary);">
-                    <h3 style="color: var(--primary);"><i class="fas fa-tools"></i> ระบบจัดการ</h3>
+                    <h3 style="color: var(--primary);"><i class="fas fa-tools"></i> ระบบจัดการ (Auto-Save)</h3>
                     
                     <div class="admin-grid" style="margin-bottom: 20px;">
                         <div>
@@ -226,7 +218,7 @@
                             </select>
                         </div>
                         <div style="display: flex; gap: 10px;">
-                            <button onclick="saveMember()" id="saveBtn" class="btn-action">บันทึกข้อมูลสมาชิก</button>
+                            <button onclick="saveMember()" id="saveBtn" class="btn-action">บันทึกสมาชิก</button>
                             <button onclick="resetForm()" class="btn-action btn-secondary">ล้างฟอร์ม</button>
                         </div>
                     </div>
@@ -268,52 +260,57 @@
             const sound = document.getElementById('scream-sound');
             overlay.style.display = 'flex';
             document.body.classList.add('shaking');
-            sound.play();
+            sound.play().catch(()=>{});
             setTimeout(() => {
                 overlay.style.display = 'none';
                 document.body.classList.remove('shaking');
             }, 1000);
         }
 
-        function openUIModal(title, desc, onConfirm) {
-            document.getElementById('uiModalTitle').innerText = title;
-            document.getElementById('uiModalDesc').innerText = desc;
-            document.getElementById('uiModal').style.display = 'flex';
-            document.getElementById('uiModalConfirm').onclick = () => { onConfirm(); closeUIModal(); };
-        }
-        function closeUIModal() { document.getElementById('uiModal').style.display = 'none'; }
-
         function showView(v) {
-            if (v === 'memberView') {
-                document.getElementById('memberView').classList.remove('hidden');
-                document.getElementById('adminLoginView').classList.add('hidden');
-            } else {
-                document.getElementById('memberView').classList.add('hidden');
-                document.getElementById('adminLoginView').classList.remove('hidden');
-            }
+            document.getElementById('memberView').classList.toggle('hidden', v !== 'memberView');
+            document.getElementById('adminLoginView').classList.toggle('hidden', v !== 'adminLoginView');
         }
 
-        function handleLogin() {
-            const pass = document.getElementById('loginPass').value;
-            if(pass === "cgtteam790" || pass === "changretta790") {
-                isAdmin = true;
-                document.getElementById('adminPanel').classList.remove('hidden');
-                document.getElementById('navAdmin').innerHTML = '<i class="fas fa-sign-out-alt"></i> LOGOUT';
-                showView('memberView');
-                showToast("ยินดีต้อนรับ แอดมิน!");
-                renderRoster();
+        // --- NEW KEY SYSTEM ---
+        function generateNewKey() {
+            const pass = document.getElementById('genPass').value;
+            if(pass === "changretta790") {
+                const newKey = 'KEY-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+                db.ref('validKeys/' + newKey).set(true);
+                const res = document.getElementById('newKeyResult');
+                res.innerHTML = `สร้างสำเร็จ! กรุณาคัดลอก KEY นี้:<br><strong>${newKey}</strong>`;
+                res.classList.remove('hidden');
+                document.getElementById('genPass').value = "";
+                showToast("สร้าง Access Key สำเร็จ");
             } else {
                 triggerJumpscare();
                 showToast("รหัสผ่านไม่ถูกต้อง!");
             }
         }
 
-        function checkAdminStatus() { 
-            if (isAdmin) location.reload();
-            else showView('adminLoginView'); 
+        function handleLoginByKey() {
+            const key = document.getElementById('accessKeyInput').value.trim();
+            if(!key) return showToast("กรุณาใส่ KEY");
+
+            db.ref('validKeys/' + key).once('value', snap => {
+                if(snap.exists()) {
+                    isAdmin = true;
+                    document.getElementById('adminPanel').classList.remove('hidden');
+                    document.getElementById('navAdmin').innerHTML = '<i class="fas fa-sign-out-alt"></i> LOGOUT';
+                    showView('memberView');
+                    showToast("เข้าสู่ระบบแอดมินสำเร็จ");
+                    renderRoster();
+                } else {
+                    triggerJumpscare();
+                    showToast("KEY ไม่ถูกต้องหรือหมดอายุ!");
+                }
+            });
         }
 
-        // --- แก้ไขระบบจัดการ (Settings) ---
+        function checkAdminStatus() { isAdmin ? location.reload() : showView('adminLoginView'); }
+
+        // --- FIXED SETTINGS SYSTEM ---
         function updateSetting(key, value) {
             if(!isAdmin) return;
             db.ref('settings/' + key).set(value);
@@ -321,7 +318,6 @@
 
         db.ref('settings').on('value', snap => {
             const s = snap.val() || {};
-            // อัปเดต UI ตามฐานข้อมูล
             if(s.primary) {
                 document.documentElement.style.setProperty('--primary', s.primary);
                 document.getElementById('configColor').value = s.primary;
@@ -340,7 +336,7 @@
             }
         });
 
-        // --- ระบบสมาชิก ---
+        // --- ROSTER SYSTEM ---
         function renderRoster() {
             db.ref('roster').on('value', snap => {
                 const grids = { founder: 'founderGrid', leader: 'leaderGrid', member: 'memberGrid' };
@@ -379,13 +375,10 @@
                 role: document.getElementById('newRole').value
             };
             if(!memberData.name) return showToast("กรุณากรอกชื่อ");
-
-            openUIModal("บันทึกข้อมูล", "ยืนยันการบันทึกสมาชิก?", () => {
-                if(id) db.ref('roster/' + id).update(memberData);
-                else db.ref('roster').push(memberData);
-                showToast("บันทึกสำเร็จ");
-                resetForm();
-            });
+            if(id) db.ref('roster/' + id).update(memberData);
+            else db.ref('roster').push(memberData);
+            showToast("บันทึกสมาชิกสำเร็จ");
+            resetForm();
         }
 
         function prepareEdit(id, name, img, fb, role) {
@@ -399,10 +392,10 @@
         }
 
         function deleteMember(id) {
-            openUIModal("ลบสมาชิก", "ต้องการลบข้อมูลถาวร?", () => {
+            if(confirm("ลบสมาชิกรายนี้?")) {
                 db.ref('roster/' + id).remove();
-                showToast("ลบข้อมูลสำเร็จ");
-            });
+                showToast("ลบสำเร็จ");
+            }
         }
 
         function resetForm() {
@@ -410,7 +403,7 @@
             document.getElementById('newName').value = "";
             document.getElementById('newImg').value = "";
             document.getElementById('newFB').value = "";
-            document.getElementById('saveBtn').innerText = "บันทึกข้อมูลสมาชิก";
+            document.getElementById('saveBtn').innerText = "บันทึกสมาชิก";
         }
     </script>
 </body>
