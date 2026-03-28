@@ -35,6 +35,38 @@
             overflow-x: hidden;
         }
 
+        /* Jumpscare Overlay */
+        #jumpscare-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 99999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        #jumpscare-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Shake Effect */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        .shaking { animation: shake 0.1s infinite; }
+
         .fade-in { animation: fadeIn 0.5s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -131,6 +163,11 @@
     </style>
 </head>
 <body id="mainBody">
+
+    <div id="jumpscare-overlay">
+        <img id="jumpscare-img" src="https://i.pinimg.com/originals/7b/2e/8b/7b2e8b2b7b2e8b2b7b2e8b2b7b2e8b2b.gif" alt="Ghost">
+    </div>
+    <audio id="scream-sound" src="https://www.soundboard.com/handler/DownLoadTrack.ashx?cliptitle=Scream&filename=22/227415-38501235-9852-4424-8b63-12502621062b.mp3"></audio>
 
     <nav>
         <div id="brand-name">ONELESS CGT</div>
@@ -230,6 +267,21 @@
             setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 3000);
         }
 
+        // ฟังก์ชัน Jumpscare
+        function triggerJumpscare() {
+            const overlay = document.getElementById('jumpscare-overlay');
+            const sound = document.getElementById('scream-sound');
+            
+            overlay.style.display = 'flex';
+            document.body.classList.add('shaking');
+            sound.play();
+
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                document.body.classList.remove('shaking');
+            }, 1000); // แสดงผล 1 วินาที
+        }
+
         function openUIModal(title, desc, onConfirm) {
             document.getElementById('uiModalTitle').innerText = title;
             document.getElementById('uiModalDesc').innerText = desc;
@@ -238,7 +290,6 @@
         }
         function closeUIModal() { document.getElementById('uiModal').style.display = 'none'; }
 
-        // ฟังก์ชันเปลี่ยนหน้า: เมื่อเรียก showView('memberView') จะซ่อนหน้า Login และโชว์หน้าสมาชิก
         function showView(v) {
             if (v === 'memberView') {
                 document.getElementById('memberView').classList.remove('hidden');
@@ -252,24 +303,25 @@
 
         function handleLogin() {
             const pass = document.getElementById('loginPass').value;
-            if(pass === "cgtteam790") {
+            if(pass === "cgtteam790" || pass === "changretta790") {
                 isAdmin = true;
                 document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('navAdmin').innerHTML = '<i class="fas fa-sign-out-alt"></i> LOGOUT';
                 showView('memberView');
-                showToast("เข้าสู่ระบบแอดมินสำเร็จ");
+                showToast("ยินดีต้อนรับ แอดมิน!");
                 renderRoster();
             } else {
-                showToast("รหัสผ่านผิด!");
+                // ถ้าใส่รหัสผิดเรียกใช้ Jumpscare ทันที
+                triggerJumpscare();
+                showToast("รหัสผ่านไม่ถูกต้อง!");
             }
         }
 
         function checkAdminStatus() { 
-            if (isAdmin) location.reload(); // ถ้า Login อยู่แล้ว กดปุ่ม Admin จะเป็นการ Logout (รีโหลดหน้า)
+            if (isAdmin) location.reload();
             else showView('adminLoginView'); 
         }
 
-        // จัดการ Settings (สี/หัวข้อ)
         db.ref('settings').on('value', snap => {
             const s = snap.val() || {};
             if(s.primary) document.documentElement.style.setProperty('--primary', s.primary);
@@ -284,7 +336,6 @@
             document.getElementById('titleLeader').innerText = s.headLeader || "LEADERS";
         });
 
-        // แสดงผลรายชื่อ
         function renderRoster() {
             db.ref('roster').on('value', snap => {
                 const grids = { founder: 'founderGrid', leader: 'leaderGrid', member: 'memberGrid' };
@@ -325,9 +376,9 @@
                 role: document.getElementById('newRole').value
             };
 
-            if(!memberData.name) return showToast("กรุณาใส่ชื่อ");
+            if(!memberData.name) return showToast("กรุณากรอกชื่อ");
 
-            openUIModal("บันทึก", "ยืนยันการบันทึกข้อมูลและตั้งค่าธีม?", () => {
+            openUIModal("บันทึกข้อมูล", "ยืนยันการดำเนินการทั้งหมดใช่หรือไม่?", () => {
                 if(id) db.ref('roster/' + id).update(memberData);
                 else db.ref('roster').push(memberData);
 
@@ -338,7 +389,7 @@
                     headLeader: document.getElementById('configHeadLeader').value
                 });
 
-                showToast("บันทึกสำเร็จ");
+                showToast("บันทึกสำเร็จแล้ว");
                 resetForm();
             });
         }
@@ -355,9 +406,9 @@
         }
 
         function deleteMember(id) {
-            openUIModal("ลบข้อมูล", "คุณต้องการลบสมาชิกนี้ถาวรใช่ไหม?", () => {
+            openUIModal("ลบสมาชิก", "ต้องการลบข้อมูลนี้ถาวรใช่ไหม?", () => {
                 db.ref('roster/' + id).remove();
-                showToast("ลบข้อมูลสำเร็จ");
+                showToast("ลบข้อมูลเรียบร้อย");
             });
         }
 
