@@ -23,6 +23,9 @@
 
         body {
             background-color: var(--bg-dark);
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
             color: #fff;
             font-family: 'Rajdhani', 'Kanit', sans-serif;
             margin: 0; min-height: 100vh;
@@ -40,7 +43,7 @@
         }
         #brand-name { font-weight: 900; letter-spacing: 5px; font-family: 'Orbitron'; font-size: 1.6rem; color: var(--primary); }
 
-        /* --- Admin Panel (ภาษาไทย) --- */
+        /* --- Admin Panel (Thai UI) --- */
         .admin-form-box { background: rgba(255,255,255,0.03); border: 1px dashed var(--primary); padding: 25px; border-radius: 15px; margin-bottom: 30px; }
         .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
         input, select { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 12px; color: #fff; border-radius: 8px; font-family: 'Kanit'; outline: none; }
@@ -49,7 +52,7 @@
         .btn-action { background: var(--primary); color: #000; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; }
         .btn-action:hover { transform: scale(1.05); opacity: 0.9; }
 
-        /* --- Section Styling --- */
+        /* --- Section Styling (English View) --- */
         .section-title { 
             font-family: 'Orbitron'; font-size: 1.2rem; font-weight: 900; 
             letter-spacing: 8px; color: #fff; margin: 60px 0 25px; 
@@ -62,11 +65,11 @@
             background: var(--card-bg); border: 1px solid var(--border-color);
             padding: 20px; display: flex; align-items: center; gap: 15px;
             border-radius: 12px; position: relative; transition: var(--transition);
-            overflow: hidden; /* ป้องกันเนื้อหาทะลุ */
+            overflow: hidden;
         }
         .member-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        
-        /* แก้ไขรูปภาพให้อยู่ในกรอบ */
+
+        /* กรอบรูปโปรไฟล์ (ไม่ทะลุ) */
         .avatar-box { 
             width: 70px; 
             height: 70px; 
@@ -79,24 +82,20 @@
         }
 
         .role-tag { font-family: 'Orbitron'; font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; padding: 3px 8px; border-radius: 4px; background: rgba(255,255,255,0.1); margin-bottom: 5px; display: inline-block; }
+        
+        .hidden { display: none !important; }
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 12px 30px; border-radius: 50px; font-weight: 900; z-index: 1000; font-family: 'Kanit'; font-size: 0.85rem; }
 
-        /* --- Custom Modal UI (แทน Chrome Popup) --- */
+        /* Custom UI Confirm Modal */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
             display: none; align-items: center; justify-content: center;
-            z-index: 1000; backdrop-filter: blur(5px);
+            z-index: 2000; backdrop-filter: blur(8px);
         }
         .custom-modal {
             background: #111; border: 1px solid var(--primary); padding: 30px;
             border-radius: 15px; max-width: 400px; width: 90%; text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,1);
         }
-        .modal-title { font-family: 'Kanit'; font-weight: 900; color: var(--primary); margin-bottom: 15px; font-size: 1.2rem; }
-        .modal-desc { font-family: 'Kanit'; color: #ccc; margin-bottom: 25px; }
-        .modal-btns { display: flex; gap: 10px; justify-content: center; }
-
-        .hidden { display: none !important; }
-        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 12px 30px; border-radius: 50px; font-weight: 900; z-index: 1000; font-family: 'Kanit'; font-size: 0.85rem; }
     </style>
 </head>
 <body id="mainBody">
@@ -104,16 +103,16 @@
     <nav>
         <div id="brand-name">ONELESS CGT</div>
         <div style="display: flex; gap: 20px;">
-            <button onclick="showView('memberView')" class="btn-action" style="background:none; color:#fff;">หน้าหลัก</button>
-            <button onclick="showView('adminLoginView')" id="navAdmin" class="btn-action">แอดมิน</button>
+            <button onclick="showView('memberView')" class="btn-action" style="background:none; color:#fff;">HOME</button>
+            <button onclick="showView('adminLoginView')" id="navAdmin" class="btn-action">ADMIN</button>
         </div>
     </nav>
 
     <div id="uiModal" class="modal-overlay">
         <div class="custom-modal">
-            <div id="uiModalTitle" class="modal-title">ยืนยันการดำเนินการ</div>
-            <div id="uiModalDesc" class="modal-desc">คุณแน่ใจหรือไม่ที่จะดำเนินการนี้?</div>
-            <div class="modal-btns">
+            <h2 id="uiModalTitle" style="font-family:'Kanit'; color:var(--primary); margin-bottom:15px;">ยืนยันการดำเนินการ</h2>
+            <p id="uiModalDesc" style="font-family:'Kanit'; color:#ccc; margin-bottom:25px;">คุณต้องการทำรายการนี้ใช่หรือไม่?</p>
+            <div style="display:flex; gap:10px; justify-content:center;">
                 <button id="uiModalConfirm" class="btn-action">ตกลง</button>
                 <button onclick="closeUIModal()" class="btn-action" style="background:#333; color:#fff;">ยกเลิก</button>
             </div>
@@ -123,7 +122,7 @@
     <div class="container">
         <section id="adminLoginView" class="hidden" style="text-align: center; padding-top: 10vh;">
             <div style="max-width: 350px; margin: auto; background: var(--card-bg); padding: 40px; border-radius: 20px; border: 1px solid var(--primary);">
-                <h2 style="font-family: 'Orbitron'; color: var(--primary);">ยืนยันตัวตน</h2>
+                <h2 style="font-family: 'Kanit'; color: var(--primary);">ยืนยันตัวตน</h2>
                 <input type="password" id="loginPass" placeholder="รหัสผ่านระบบ" style="width: 100%; box-sizing: border-box; margin-bottom: 20px; text-align: center;">
                 <button onclick="handleLogin()" class="btn-action" style="width: 100%;">เข้าสู่ระบบ</button>
             </div>
@@ -133,17 +132,29 @@
             
             <div id="adminPanel" class="hidden">
                 <div class="admin-form-box">
-                    <h3 style="font-family: 'Kanit'; color: var(--primary); margin-top: 0;">จัดการข้อมูลสมาชิก</h3>
+                    <h3 style="font-family: 'Kanit'; color: var(--primary); margin-top: 0;">🛠️ จัดการรายชื่อสมาชิก</h3>
                     <div class="admin-grid">
                         <input type="hidden" id="editMemberId">
-                        <input type="text" id="newName" placeholder="ชื่อ-นามสกุล">
-                        <input type="text" id="newImg" placeholder="ลิงก์รูปภาพ (URL)">
-                        <input type="text" id="newFB" placeholder="ลิงก์ Facebook">
-                        <select id="newRole">
-                            <option value="founder">ผู้ก่อตั้ง (Founder)</option>
-                            <option value="leader">หัวหน้า (Leader)</option>
-                            <option value="member" selected>สมาชิก (Member)</option>
-                        </select>
+                        <div>
+                            <label style="font-size: 0.7rem; color: var(--primary);">ชื่อ-นามสกุล</label>
+                            <input type="text" id="newName" placeholder="ระบุชื่อ..." style="width:100%">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.7rem; color: var(--primary);">ลิงก์รูปภาพโปรไฟล์</label>
+                            <input type="text" id="newImg" placeholder="https://..." style="width:100%">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.7rem; color: var(--primary);">ลิงก์ Facebook</label>
+                            <input type="text" id="newFB" placeholder="Facebook URL" style="width:100%">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.7rem; color: var(--primary);">ตำแหน่ง</label>
+                            <select id="newRole" style="width:100%">
+                                <option value="founder">ผู้ก่อตั้ง (Founder)</option>
+                                <option value="leader">หัวหน้า (Leader)</option>
+                                <option value="member">สมาชิก (Member)</option>
+                            </select>
+                        </div>
                     </div>
                     <button onclick="saveMember()" id="saveBtn" class="btn-action">บันทึกข้อมูล</button>
                     <button onclick="resetForm()" class="btn-action" style="background:#444; color:#fff;">ล้างค่า</button>
@@ -168,43 +179,37 @@
     </div>
 
     <script>
-        // --- Firebase Config ---
         const firebaseConfig = { databaseURL: "https://calvyn-999ea-default-rtdb.asia-southeast1.firebasedatabase.app/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         let isAdmin = false;
 
-        // --- Custom UI Alert/Confirm ---
+        // Custom UI Modal Logic
         function openUIModal(title, desc, onConfirm) {
             document.getElementById('uiModalTitle').innerText = title;
             document.getElementById('uiModalDesc').innerText = desc;
-            const modal = document.getElementById('uiModal');
-            modal.style.display = 'flex';
+            document.getElementById('uiModal').style.display = 'flex';
             document.getElementById('uiModalConfirm').onclick = () => {
                 onConfirm();
                 closeUIModal();
             };
         }
-
-        function closeUIModal() {
-            document.getElementById('uiModal').style.display = 'none';
-        }
+        function closeUIModal() { document.getElementById('uiModal').style.display = 'none'; }
 
         function showToast(m) {
             const t = document.createElement('div'); t.className = 'toast'; t.innerText = m;
             document.body.appendChild(t); setTimeout(() => t.remove(), 2500);
         }
 
-        // --- ระบบล็อกอิน ---
         function handleLogin() {
             if(document.getElementById('loginPass').value === "0808") {
                 isAdmin = true;
                 document.getElementById('adminPanel').classList.remove('hidden');
-                document.getElementById('navAdmin').innerText = "ออกจากระบบ";
+                document.getElementById('navAdmin').innerText = "LOGOUT";
                 document.getElementById('navAdmin').onclick = () => location.reload();
                 showView('memberView');
-                showToast("ยินดีต้อนรับเข้าสู่ระบบจัดการ");
+                showToast("เข้าสู่ระบบสำเร็จ");
             } else {
                 showToast("รหัสผ่านไม่ถูกต้อง");
             }
@@ -215,7 +220,7 @@
             document.getElementById('adminLoginView').classList.toggle('hidden', v !== 'adminLoginView');
         }
 
-        // --- Database Listeners ---
+        // Database Listeners
         db.ref('roster').on('value', snap => {
             const grids = { founder: document.getElementById('founderGrid'), leader: document.getElementById('leaderGrid'), member: document.getElementById('memberGrid') };
             Object.values(grids).forEach(g => g.innerHTML = "");
@@ -244,7 +249,7 @@
             });
         });
 
-        // --- การจัดการสมาชิก ---
+        // Admin Actions
         function saveMember() {
             const id = document.getElementById('editMemberId').value;
             const data = {
@@ -255,12 +260,11 @@
             };
             if(!data.name) return showToast("กรุณากรอกชื่อสมาชิก");
             
-            const actionText = id ? "อัปเดตข้อมูล" : "เพิ่มข้อมูล";
-            openUIModal("ยืนยันการบันทึก", `ต้องการ ${actionText} ของคุณ ${data.name} ใช่หรือไม่?`, () => {
+            openUIModal("ยืนยันการบันทึก", `คุณต้องการบันทึกข้อมูลของ ${data.name} ใช่หรือไม่?`, () => {
                 if(id) db.ref('roster/' + id).update(data);
                 else db.ref('roster').push(data);
                 resetForm();
-                showToast("บันทึกข้อมูลเรียบร้อยแล้ว");
+                showToast("บันทึกสำเร็จ");
             });
         }
 
@@ -272,13 +276,13 @@
             document.getElementById('newRole').value = data.role;
             document.getElementById('saveBtn').innerText = "แก้ไขข้อมูลสมาชิก";
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            showToast("แก้ไขข้อมูล: " + data.name);
+            showToast("กำลังแก้ไขข้อมูลคุณ " + data.name);
         }
 
         function askDeleteMember(id) {
-            openUIModal("ยืนยันการลบ", "คุณแน่ใจหรือไม่ที่จะลบรายชื่อสมาชิกนี้ออกจากระบบ?", () => {
+            openUIModal("ยืนยันการลบ", "ข้อมูลสมาชิกนี้จะหายไปจากระบบถาวร คุณแน่ใจหรือไม่?", () => {
                 db.ref('roster/' + id).remove();
-                showToast("ลบรายชื่อเรียบร้อยแล้ว");
+                showToast("ลบข้อมูลเรียบร้อยแล้ว");
             });
         }
 
