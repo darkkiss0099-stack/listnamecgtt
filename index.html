@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONELESS CHANGRETTA</title>
+    <title>CHANGRETTA[LESS]</title>
     
     <link rel="icon" type="image/png" href="https://img1.pic.in.th/images/cgtlogo2.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,10 +17,8 @@
             --primary: #f3d48b;
             --bg-dark: #0a0a0b;
             --card-bg: rgba(20, 20, 25, 0.7);
-            --glass: rgba(255, 255, 255, 0.05);
             --border-color: rgba(255, 255, 255, 0.1);
             --danger: #ff4757;
-            --success: #2ed573;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -37,25 +35,22 @@
             overflow-x: hidden;
         }
 
-        /* --- Animations --- */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .fade-in { animation: fadeIn 0.6s ease forwards; }
+        .fade-in { animation: fadeIn 0.5s ease forwards; }
 
-        /* --- Navbar --- */
         nav { 
             display: flex; justify-content: space-between; padding: 15px 5%; 
-            background: rgba(0,0,0,0.8); align-items: center; position: sticky; 
+            background: rgba(0,0,0,0.85); align-items: center; position: sticky; 
             top: 0; z-index: 100; backdrop-filter: blur(15px); border-bottom: 1px solid var(--border-color);
         }
-        #brand-name { font-weight: 900; letter-spacing: 3px; font-family: 'Orbitron'; font-size: 1.4rem; color: var(--primary); text-shadow: 0 0 10px rgba(243, 212, 139, 0.3); }
+        #brand-name { font-weight: 900; letter-spacing: 3px; font-family: 'Orbitron'; font-size: 1.4rem; color: var(--primary); }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
 
-        /* --- Forms & Inputs --- */
         .glass-panel {
             background: var(--card-bg);
             backdrop-filter: blur(10px);
@@ -84,7 +79,6 @@
         .btn-action:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(243, 212, 139, 0.3); }
         .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; }
 
-        /* --- Member Cards --- */
         .section-title { 
             font-family: 'Orbitron'; font-size: 1.1rem; font-weight: 900; 
             letter-spacing: 5px; color: #fff; margin: 50px 0 20px; 
@@ -100,11 +94,7 @@
             border-radius: 12px; position: relative; transition: var(--transition);
             backdrop-filter: blur(5px);
         }
-        .member-card:hover { 
-            border-color: var(--primary); 
-            transform: scale(1.02);
-            background: rgba(255,255,255,0.08);
-        }
+        .member-card:hover { border-color: var(--primary); background: rgba(255,255,255,0.05); }
         
         .avatar-box { 
             width: 65px; height: 65px; background-size: cover; 
@@ -118,24 +108,31 @@
             margin-bottom: 5px; display: inline-block;
         }
 
-        /* --- Log Table --- */
+        .admin-controls {
+            display: flex; flex-direction: column; gap: 8px;
+            padding-left: 10px; border-left: 1px solid var(--border-color);
+        }
+        .ctrl-btn {
+            background: none; border: none; cursor: pointer; font-size: 1.1rem;
+            transition: var(--transition); padding: 5px;
+        }
+        .ctrl-btn.edit { color: var(--primary); }
+        .ctrl-btn.delete { color: var(--danger); }
+        .ctrl-btn:hover { transform: scale(1.2); }
+
         .log-container {
-            max-height: 200px; overflow-y: auto; font-size: 0.8rem;
+            max-height: 180px; overflow-y: auto; font-size: 0.8rem;
             background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px;
         }
         .log-item { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: #aaa; }
-        .log-item b { color: var(--primary); }
-
-        .hidden { display: none !important; }
         
+        .hidden { display: none !important; }
         .toast { 
             position: fixed; top: 20px; right: 20px; background: var(--primary); 
             color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 900; 
             z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: fadeIn 0.3s ease;
         }
 
-        /* Modal */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.9);
             display: none; align-items: center; justify-content: center;
@@ -159,8 +156,8 @@
 
     <div id="uiModal" class="modal-overlay">
         <div class="custom-modal">
-            <h3 id="uiModalTitle" style="color:var(--primary); margin-bottom:10px;">ยืนยัน</h3>
-            <p id="uiModalDesc" style="color:#ccc; margin-bottom:25px;">คุณต้องการดำเนินการต่อหรือไม่?</p>
+            <h3 id="uiModalTitle" style="color:var(--primary);">ยืนยัน</h3>
+            <p id="uiModalDesc" style="color:#ccc; margin-bottom:25px;">ยืนยันการดำเนินการ?</p>
             <div style="display:flex; gap:10px; justify-content:center;">
                 <button id="uiModalConfirm" class="btn-action">ตกลง</button>
                 <button onclick="closeUIModal()" class="btn-action btn-secondary">ยกเลิก</button>
@@ -171,24 +168,23 @@
     <div class="container">
         <section id="adminLoginView" class="hidden fade-in" style="padding-top: 10vh;">
             <div style="max-width: 400px; margin: auto; text-align: center;" class="glass-panel">
-                <i class="fas fa-lock" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
-                <h2 style="font-family: 'Kanit'; margin-bottom: 5px;">Admin Login</h2>
-                <p style="color: #888; margin-bottom: 25px;">กรุณากรอกรหัสผ่านเพื่อเข้าสู่ระบบ</p>
-                <input type="text" id="adminName" placeholder="ชื่อผู้ล็อคอิน" style="margin-bottom: 10px; text-align: center;">
+                <i class="fas fa-user-lock" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+                <h2 style="font-family: 'Kanit';">ADMIN LOGIN</h2>
+                <input type="text" id="adminName" placeholder="ชื่อผู้ใช้งาน" style="margin-bottom: 10px; text-align: center;">
                 <input type="password" id="loginPass" placeholder="รหัสผ่าน" style="margin-bottom: 20px; text-align: center;">
-                <button onclick="handleLogin()" class="btn-action" style="width: 100%;">ENTER SYSTEM</button>
+                <button onclick="handleLogin()" class="btn-action" style="width: 100%;">เข้าสู่ระบบ</button>
             </div>
         </section>
 
         <section id="memberView" class="fade-in">
             <div id="adminPanel" class="hidden">
                 <div class="glass-panel" style="border-left: 5px solid var(--primary);">
-                    <h3 style="color: var(--primary); margin: 0 0 20px 0;"><i class="fas fa-cog"></i> DASHBOARD CONTROL</h3>
+                    <h3 style="color: var(--primary); margin: 0 0 20px 0;"><i class="fas fa-tools"></i> ส่วนการจัดการระบบ</h3>
                     
                     <div class="admin-grid" style="margin-bottom: 25px;">
                         <div>
                             <label>สีธีมหลัก</label>
-                            <input type="color" id="configColor" oninput="applyColor(this.value)" style="height:45px; padding:2px; cursor:pointer;">
+                            <input type="color" id="configColor" oninput="applyColor(this.value)">
                         </div>
                         <div>
                             <label>รูปพื้นหลัง (URL)</label>
@@ -199,12 +195,12 @@
                     </div>
 
                     <div class="glass-panel" style="background: rgba(0,0,0,0.2);">
-                        <h4 style="margin-top:0;"><i class="fas fa-user-plus"></i> จัดการสมาชิก</h4>
+                        <h4 style="margin-top:0;"><i class="fas fa-edit"></i> ฟอร์มจัดการสมาชิก</h4>
                         <div class="admin-grid" style="margin-bottom: 15px;">
                             <input type="hidden" id="editMemberId">
                             <input type="text" id="newName" placeholder="ชื่อ-นามสกุล">
-                            <input type="text" id="newImg" placeholder="ลิงก์รูปโปรไฟล์">
-                            <input type="text" id="newFB" placeholder="ลิงก์ Facebook">
+                            <input type="text" id="newImg" placeholder="ลิ้งก์รูปโปรไฟล์">
+                            <input type="text" id="newFB" placeholder="ลิ้งก์ Facebook">
                             <select id="newRole">
                                 <option value="founder">Founder</option>
                                 <option value="leader">Leader</option>
@@ -212,13 +208,13 @@
                             </select>
                         </div>
                         <div style="display: flex; gap: 10px;">
-                            <button onclick="saveMember()" id="saveBtn" class="btn-action">บันทึกข้อมูล</button>
-                            <button onclick="resetForm()" class="btn-action btn-secondary">ล้างค่า</button>
+                            <button onclick="saveMember()" id="saveBtn" class="btn-action">บันทึกสมาชิก</button>
+                            <button onclick="resetForm()" class="btn-action btn-secondary">ล้างฟอร์ม</button>
                         </div>
                     </div>
 
                     <div style="margin-top: 20px;">
-                        <label><i class="fas fa-history"></i> ประวัติการเข้าใช้งาน (Recent Logs)</label>
+                        <label><i class="fas fa-history"></i> ประวัติการเข้าใช้ (Logs)</label>
                         <div id="loginLogs" class="log-container"></div>
                     </div>
                 </div>
@@ -242,17 +238,15 @@
     </div>
 
     <script>
-        // --- Firebase Config ---
         const firebaseConfig = { databaseURL: "https://calvyn-999ea-default-rtdb.asia-southeast1.firebasedatabase.app/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         let isAdmin = false;
 
-        // --- UI Functions ---
         function showToast(m) {
-            const t = document.createElement('div'); t.className = 'toast';
-            t.innerHTML = `<i class="fas fa-info-circle"></i> ${m}`;
+            const t = document.createElement('div'); t.className = 'toast fade-in';
+            t.innerHTML = `<i class="fas fa-bell"></i> ${m}`;
             document.body.appendChild(t);
             setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 3000);
         }
@@ -268,7 +262,6 @@
         function showView(v) {
             document.getElementById('memberView').classList.toggle('hidden', v !== 'memberView');
             document.getElementById('adminLoginView').classList.toggle('hidden', v !== 'adminLoginView');
-            window.scrollTo(0,0);
         }
 
         function applyColor(c) { document.documentElement.style.setProperty('--primary', c); }
@@ -278,39 +271,33 @@
             document.getElementById('titleLeader').innerText = document.getElementById('configHeadLeader').value || "LEADERS";
         }
 
-        // --- Admin & Logs ---
-        function checkAdminStatus() {
-            if (isAdmin) {
-                isAdmin = false;
-                location.reload();
-            } else {
-                showView('adminLoginView');
-            }
-        }
-
         function handleLogin() {
             const pass = document.getElementById('loginPass').value;
-            const name = document.getElementById('adminName').value || "Unknown Admin";
+            const name = document.getElementById('adminName').value || "Admin User";
             
-            if(pass === "0808") {
+            if(pass === "cgtteam790" || pass === "changretta790") {
                 isAdmin = true;
-                // บันทึก Log
                 db.ref('logs').push({
                     user: name,
                     time: new Date().toLocaleString('th-TH'),
-                    action: "Logged In"
+                    action: "Login เข้าสู่ระบบแอดมิน"
                 });
 
                 document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('navAdmin').innerHTML = '<i class="fas fa-sign-out-alt"></i> LOGOUT';
                 showView('memberView');
                 showToast(`ยินดีต้อนรับคุณ ${name}`);
+                // สั่ง Render รายชื่อใหม่เพื่อให้ปุ่มแก้ไขขึ้นมา
+                db.ref('roster').once('value', () => {}); 
             } else {
                 showToast("รหัสผ่านไม่ถูกต้อง!");
             }
         }
 
-        // ดึง Logs
+        function checkAdminStatus() {
+            if (isAdmin) { location.reload(); } else { showView('adminLoginView'); }
+        }
+
         db.ref('logs').limitToLast(10).on('value', snap => {
             const logsDiv = document.getElementById('loginLogs');
             logsDiv.innerHTML = "";
@@ -322,7 +309,6 @@
             }
         });
 
-        // --- Data Handling ---
         db.ref('settings').on('value', snap => {
             const s = snap.val() || {};
             if(s.primary) applyColor(s.primary);
@@ -335,11 +321,7 @@
         });
 
         db.ref('roster').on('value', snap => {
-            const grids = { 
-                founder: document.getElementById('founderGrid'), 
-                leader: document.getElementById('leaderGrid'), 
-                member: document.getElementById('memberGrid') 
-            };
+            const grids = { founder: document.getElementById('founderGrid'), leader: document.getElementById('leaderGrid'), member: document.getElementById('memberGrid') };
             Object.values(grids).forEach(g => g.innerHTML = "");
             const data = snap.val();
             if(!data) return;
@@ -352,15 +334,17 @@
                     <div class="avatar-box" style="background-image: url('${item.img || ''}')"></div>
                     <div style="flex:1">
                         <span class="role-tag">${item.role.toUpperCase()}</span>
-                        <div style="font-weight:700; font-family:'Orbitron'; font-size:1rem; color: #fff;">${item.name}</div>
-                        <a href="${item.fb}" target="_blank" style="font-size:0.7rem; color:var(--primary); text-decoration:none; opacity:0.7;">
-                            <i class="fab fa-facebook"></i> VIEW PROFILE
-                        </a>
+                        <div style="font-weight:700; font-family:'Orbitron'; font-size:1.1rem; color: #fff;">${item.name}</div>
+                        <a href="${item.fb}" target="_blank" style="font-size:0.75rem; color:var(--primary); text-decoration:none; opacity:0.8;">FACEBOOK</a>
                     </div>
                     ${isAdmin ? `
-                        <div style="display:flex; flex-direction:column; gap:5px;">
-                            <button onclick="editMember('${id}', ${JSON.stringify(item).replace(/"/g, '&quot;')})" style="background:none; border:none; color:var(--primary); cursor:pointer;"><i class="fas fa-edit"></i></button>
-                            <button onclick="askDeleteMember('${id}')" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fas fa-trash"></i></button>
+                        <div class="admin-controls">
+                            <button class="ctrl-btn edit" title="แก้ไข" onclick="editMember('${id}', ${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button class="ctrl-btn delete" title="ลบ" onclick="askDeleteMember('${id}')">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
                         </div>
                     ` : ''}
                 `;
@@ -377,9 +361,9 @@
                 role: document.getElementById('newRole').value
             };
 
-            if(!data.name) return showToast("กรุณากรอกชื่อ");
+            if(!data.name) return showToast("กรุณากรอกชื่อสมาชิก");
 
-            openUIModal("ยืนยันการบันทึก", `คุณต้องการบันทึกข้อมูลของ ${data.name} ใช่หรือไม่?`, () => {
+            openUIModal("บันทึกข้อมูล", `ยืนยันการบันทึกข้อมูล ${data.name}?`, () => {
                 if(id) {
                     db.ref('roster/' + id).update(data);
                     showToast("อัปเดตข้อมูลสำเร็จ");
@@ -388,14 +372,12 @@
                     showToast("เพิ่มสมาชิกใหม่สำเร็จ");
                 }
                 
-                // บันทึกการตั้งค่าสี/พื้นหลังไปด้วยเลย
                 db.ref('settings').update({
                     primary: document.getElementById('configColor').value,
                     bg: document.getElementById('configBG').value,
                     headFounder: document.getElementById('configHeadFounder').value,
                     headLeader: document.getElementById('configHeadLeader').value
                 });
-
                 resetForm();
             });
         }
@@ -406,21 +388,24 @@
             document.getElementById('newImg').value = data.img;
             document.getElementById('newFB').value = data.fb;
             document.getElementById('newRole').value = data.role;
-            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-sync"></i> อัปเดตข้อมูล';
+            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-sync-alt"></i> อัปเดตข้อมูลสมาชิก';
+            
+            // เลื่อนจอขึ้นด้านบนแบบนุ่มนวลเพื่อให้เห็นฟอร์ม
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast("แก้ไขข้อมูล: " + data.name);
         }
 
         function askDeleteMember(id) {
-            openUIModal("ยืนยันการลบ", "ข้อมูลนี้จะหายไปจากระบบถาวร ยืนยันหรือไม่?", () => {
+            openUIModal("ลบข้อมูล", "ยืนยันการลบสมาชิกนี้ถาวร?", () => {
                 db.ref('roster/' + id).remove();
-                showToast("ลบสมาชิกเรียบร้อย");
+                showToast("ลบเรียบร้อยแล้ว");
             });
         }
 
         function resetForm() {
             document.getElementById('editMemberId').value = "";
             ['newName','newImg','newFB'].forEach(i => document.getElementById(i).value = "");
-            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-save"></i> บันทึกข้อมูล';
+            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-save"></i> บันทึกสมาชิก';
         }
     </script>
 </body>
