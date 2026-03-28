@@ -1,629 +1,292 @@
-ระบบแอดมินใช้ ภาษาไทย แล้วก็ทำให้มีปุ่มเพิ่มและลบและแก้ไขรายชื่อบุคคลต่อบุคคลแล้วก็เวลาแก้ไขหรือกด OK ทำ UI เองไม่เอา UI ของ chorme แล้วก็โปรไฟล์เวลาใส่ลิ้งค์ทำให้รูปอยู่ในกรอบไม่ต้องให้ทะลุออกมาเอาแค่ใน UI ADMIN เป็นภาษาไทยส่วนระบบอื่นๆไว้เหมือนเดิมรวม code มาเลย
-
 <!DOCTYPE html>
-
 <html lang="th">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>ONELESS CGT</title>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Kanit:wght@200;400;900&display=swap" rel="stylesheet">
-
     
-
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
-
-
     <style>
-
         :root {
-
             --primary: #f3d48b;
-
             --bg-dark: #050505;
-
             --card-bg: rgba(15, 15, 15, 0.85);
-
             --border-color: rgba(255, 255, 255, 0.1);
-
             --online-green: #00ff88;
-
             --danger: #ff0000;
-
             --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
         }
-
-
-
-        /* UI Theme Classes */
-
-        body.theme-minimal { --bg-dark: #f0f0f0; --card-bg: #fff; --border-color: #ddd; color: #000; }
-
-        body.theme-minimal .member-card { box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-
-        body.theme-minimal .name { color: #000; }
-
-        
-
-        body.theme-blood { --primary: #ff4d4d; --bg-dark: #1a0505; --card-bg: rgba(40, 10, 10, 0.9); }
-
-
 
         body {
-
             background-color: var(--bg-dark);
-
-            background-attachment: fixed;
-
-            background-position: center;
-
-            background-size: cover;
-
             color: #fff;
-
-            font-family: 'Rajdhani', sans-serif;
-
+            font-family: 'Rajdhani', 'Kanit', sans-serif;
             margin: 0; min-height: 100vh;
-
             overflow-x: hidden;
-
             transition: var(--transition);
-
         }
-
-
 
         .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
 
-
-
         /* --- Navbar --- */
-
         nav { 
-
             display: flex; justify-content: space-between; padding: 15px 40px; 
-
             background: rgba(0,0,0,0.85); align-items: center; position: sticky; 
-
             top: 0; z-index: 100; backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-color);
-
         }
-
         #brand-name { font-weight: 900; letter-spacing: 5px; font-family: 'Orbitron'; font-size: 1.6rem; color: var(--primary); }
 
-
-
-        /* --- Admin Panel --- */
-
+        /* --- Admin Panel (ภาษาไทย) --- */
         .admin-form-box { background: rgba(255,255,255,0.03); border: 1px dashed var(--primary); padding: 25px; border-radius: 15px; margin-bottom: 30px; }
-
         .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
-
-        input, select { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 12px; color: #fff; border-radius: 8px; font-family: 'Rajdhani'; font-weight: 700; outline: none; }
-
+        input, select { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 12px; color: #fff; border-radius: 8px; font-family: 'Kanit'; outline: none; }
         input:focus { border-color: var(--primary); }
-
         
-
         .btn-action { background: var(--primary); color: #000; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; }
-
         .btn-action:hover { transform: scale(1.05); opacity: 0.9; }
 
-
-
         /* --- Section Styling --- */
-
         .section-title { 
-
             font-family: 'Orbitron'; font-size: 1.2rem; font-weight: 900; 
-
             letter-spacing: 8px; color: #fff; margin: 60px 0 25px; 
-
             display: flex; align-items: center; gap: 20px;
-
         }
-
         .section-title::after { content: ""; height: 2px; flex-grow: 1; background: linear-gradient(to right, var(--primary), transparent); }
 
-
-
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
-
         .member-card {
-
             background: var(--card-bg); border: 1px solid var(--border-color);
-
             padding: 20px; display: flex; align-items: center; gap: 15px;
-
             border-radius: 12px; position: relative; transition: var(--transition);
-
+            overflow: hidden; /* ป้องกันเนื้อหาทะลุ */
         }
-
         .member-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-
-        .avatar-box { width: 70px; height: 70px; background-size: cover; border-radius: 10px; border: 2px solid var(--border-color); }
-
-
+        
+        /* แก้ไขรูปภาพให้อยู่ในกรอบ */
+        .avatar-box { 
+            width: 70px; 
+            height: 70px; 
+            background-size: cover; 
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 10px; 
+            border: 2px solid var(--border-color);
+            flex-shrink: 0;
+        }
 
         .role-tag { font-family: 'Orbitron'; font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; padding: 3px 8px; border-radius: 4px; background: rgba(255,255,255,0.1); margin-bottom: 5px; display: inline-block; }
 
-        
+        /* --- Custom Modal UI (แทน Chrome Popup) --- */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            display: none; align-items: center; justify-content: center;
+            z-index: 1000; backdrop-filter: blur(5px);
+        }
+        .custom-modal {
+            background: #111; border: 1px solid var(--primary); padding: 30px;
+            border-radius: 15px; max-width: 400px; width: 90%; text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,1);
+        }
+        .modal-title { font-family: 'Kanit'; font-weight: 900; color: var(--primary); margin-bottom: 15px; font-size: 1.2rem; }
+        .modal-desc { font-family: 'Kanit'; color: #ccc; margin-bottom: 25px; }
+        .modal-btns { display: flex; gap: 10px; justify-content: center; }
 
         .hidden { display: none !important; }
-
-        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 12px 30px; border-radius: 50px; font-weight: 900; z-index: 1000; font-family: 'Orbitron'; }
-
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 12px 30px; border-radius: 50px; font-weight: 900; z-index: 1000; font-family: 'Kanit'; font-size: 0.85rem; }
     </style>
-
 </head>
-
 <body id="mainBody">
 
-
-
     <nav>
-
-        <div id="brand-name">CALVYN</div>
-
+        <div id="brand-name">ONELESS CGT</div>
         <div style="display: flex; gap: 20px;">
-
-            <button onclick="showView('memberView')" class="btn-action" style="background:none; color:#fff;">HOME</button>
-
-            <button onclick="showView('adminLoginView')" id="navAdmin" class="btn-action">ADMIN</button>
-
+            <button onclick="showView('memberView')" class="btn-action" style="background:none; color:#fff;">หน้าหลัก</button>
+            <button onclick="showView('adminLoginView')" id="navAdmin" class="btn-action">แอดมิน</button>
         </div>
-
     </nav>
 
-
-
-    <div class="container">
-
-        <section id="adminLoginView" class="hidden" style="text-align: center; padding-top: 10vh;">
-
-            <div style="max-width: 350px; margin: auto; background: var(--card-bg); padding: 40px; border-radius: 20px; border: 1px solid var(--primary);">
-
-                <h2 style="font-family: 'Orbitron';">AUTHENTICATE</h2>
-
-                <input type="password" id="loginPass" placeholder="PASSKEY" style="width: 100%; box-sizing: border-box; margin-bottom: 20px; text-align: center;">
-
-                <button onclick="handleLogin()" class="btn-action" style="width: 100%;">LOGIN</button>
-
+    <div id="uiModal" class="modal-overlay">
+        <div class="custom-modal">
+            <div id="uiModalTitle" class="modal-title">ยืนยันการดำเนินการ</div>
+            <div id="uiModalDesc" class="modal-desc">คุณแน่ใจหรือไม่ที่จะดำเนินการนี้?</div>
+            <div class="modal-btns">
+                <button id="uiModalConfirm" class="btn-action">ตกลง</button>
+                <button onclick="closeUIModal()" class="btn-action" style="background:#333; color:#fff;">ยกเลิก</button>
             </div>
-
-        </section>
-
-
-
-        <section id="memberView">
-
-            
-
-            <div id="adminPanel" class="hidden">
-
-                <div class="admin-form-box">
-
-                    <h3 style="font-family: 'Orbitron'; color: var(--primary); margin-top: 0;">🎨 SYSTEM CUSTOMIZATION</h3>
-
-                    <div class="admin-grid">
-
-                        <div>
-
-                            <label>UI Theme</label><br>
-
-                            <select id="themeSelect" onchange="changeTheme(this.value)" style="width:100%">
-
-                                <option value="default">Default Dark</option>
-
-                                <option value="minimal">Minimal Light</option>
-
-                                <option value="blood">Blood Red</option>
-
-                            </select>
-
-                        </div>
-
-                        <div>
-
-                            <label>Primary Color</label><br>
-
-                            <input type="color" id="colorPicker" oninput="changeColor(this.value)" style="width:100%; height:45px; padding:2px;">
-
-                        </div>
-
-                        <div>
-
-                            <label>Website Name</label><br>
-
-                            <input type="text" id="editBrand" placeholder="Brand Name" onkeyup="updateBrand(this.value)">
-
-                        </div>
-
-                    </div>
-
-
-
-                    <h3 style="font-family: 'Orbitron'; color: var(--primary);">🏷️ SECTION HEADERS</h3>
-
-                    <div class="admin-grid">
-
-                        <input type="text" id="headFounder" placeholder="Founder Header" onkeyup="updateHeaders()">
-
-                        <input type="text" id="headLeader" placeholder="Leader Header" onkeyup="updateHeaders()">
-
-                        <input type="text" id="headMember" placeholder="Member Header" onkeyup="updateHeaders()">
-
-                    </div>
-
-
-
-                    <hr style="border: 0.5px solid rgba(255,255,255,0.1); margin: 25px 0;">
-
-
-
-                    <h3 style="font-family: 'Orbitron'; color: var(--primary);">👥 OPERATIVE MANAGER</h3>
-
-                    <div class="admin-grid">
-
-                        <input type="hidden" id="editMemberId">
-
-                        <input type="text" id="newName" placeholder="Name">
-
-                        <input type="text" id="newImg" placeholder="Image URL">
-
-                        <input type="text" id="newFB" placeholder="Facebook URL">
-
-                        <select id="newRole">
-
-                            <option value="founder">Founder</option>
-
-                            <option value="leader">Leader</option>
-
-                            <option value="member">Member</option>
-
-                        </select>
-
-                    </div>
-
-                    <button onclick="saveMember()" id="saveBtn" class="btn-action">SAVE OPERATIVE</button>
-
-                    <button onclick="resetForm()" class="btn-action" style="background:#444; color:#fff;">RESET</button>
-
-                </div>
-
-            </div>
-
-
-
-            <div id="section-founder">
-
-                <div class="section-title" id="titleFounder">FOUNDERS</div>
-
-                <div class="grid" id="founderGrid"></div>
-
-            </div>
-
-
-
-            <div id="section-leader">
-
-                <div class="section-title" id="titleLeader">LEADERS</div>
-
-                <div class="grid" id="leaderGrid"></div>
-
-            </div>
-
-
-
-            <div id="section-member">
-
-                <div class="section-title" id="titleMember">MEMBERS</div>
-
-                <div class="grid" id="memberGrid"></div>
-
-            </div>
-
-        </section>
-
+        </div>
     </div>
 
+    <div class="container">
+        <section id="adminLoginView" class="hidden" style="text-align: center; padding-top: 10vh;">
+            <div style="max-width: 350px; margin: auto; background: var(--card-bg); padding: 40px; border-radius: 20px; border: 1px solid var(--primary);">
+                <h2 style="font-family: 'Orbitron'; color: var(--primary);">ยืนยันตัวตน</h2>
+                <input type="password" id="loginPass" placeholder="รหัสผ่านระบบ" style="width: 100%; box-sizing: border-box; margin-bottom: 20px; text-align: center;">
+                <button onclick="handleLogin()" class="btn-action" style="width: 100%;">เข้าสู่ระบบ</button>
+            </div>
+        </section>
 
+        <section id="memberView">
+            
+            <div id="adminPanel" class="hidden">
+                <div class="admin-form-box">
+                    <h3 style="font-family: 'Kanit'; color: var(--primary); margin-top: 0;">จัดการข้อมูลสมาชิก</h3>
+                    <div class="admin-grid">
+                        <input type="hidden" id="editMemberId">
+                        <input type="text" id="newName" placeholder="ชื่อ-นามสกุล">
+                        <input type="text" id="newImg" placeholder="ลิงก์รูปภาพ (URL)">
+                        <input type="text" id="newFB" placeholder="ลิงก์ Facebook">
+                        <select id="newRole">
+                            <option value="founder">ผู้ก่อตั้ง (Founder)</option>
+                            <option value="leader">หัวหน้า (Leader)</option>
+                            <option value="member" selected>สมาชิก (Member)</option>
+                        </select>
+                    </div>
+                    <button onclick="saveMember()" id="saveBtn" class="btn-action">บันทึกข้อมูล</button>
+                    <button onclick="resetForm()" class="btn-action" style="background:#444; color:#fff;">ล้างค่า</button>
+                </div>
+            </div>
+
+            <div id="section-founder">
+                <div class="section-title" id="titleFounder">FOUNDERS</div>
+                <div class="grid" id="founderGrid"></div>
+            </div>
+
+            <div id="section-leader">
+                <div class="section-title" id="titleLeader">LEADERS</div>
+                <div class="grid" id="leaderGrid"></div>
+            </div>
+
+            <div id="section-member">
+                <div class="section-title" id="titleMember">MEMBERS</div>
+                <div class="grid" id="memberGrid"></div>
+            </div>
+        </section>
+    </div>
 
     <script>
-
         // --- Firebase Config ---
-
         const firebaseConfig = { databaseURL: "https://calvyn-999ea-default-rtdb.asia-southeast1.firebasedatabase.app/" };
-
         firebase.initializeApp(firebaseConfig);
-
         const db = firebase.database();
-
-
 
         let isAdmin = false;
 
+        // --- Custom UI Alert/Confirm ---
+        function openUIModal(title, desc, onConfirm) {
+            document.getElementById('uiModalTitle').innerText = title;
+            document.getElementById('uiModalDesc').innerText = desc;
+            const modal = document.getElementById('uiModal');
+            modal.style.display = 'flex';
+            document.getElementById('uiModalConfirm').onclick = () => {
+                onConfirm();
+                closeUIModal();
+            };
+        }
 
-
-        // --- Core Functions ---
+        function closeUIModal() {
+            document.getElementById('uiModal').style.display = 'none';
+        }
 
         function showToast(m) {
-
             const t = document.createElement('div'); t.className = 'toast'; t.innerText = m;
-
             document.body.appendChild(t); setTimeout(() => t.remove(), 2500);
-
         }
 
-
-
+        // --- ระบบล็อกอิน ---
         function handleLogin() {
-
             if(document.getElementById('loginPass').value === "0808") {
-
                 isAdmin = true;
-
                 document.getElementById('adminPanel').classList.remove('hidden');
-
-                document.getElementById('navAdmin').innerText = "LOGOUT";
-
+                document.getElementById('navAdmin').innerText = "ออกจากระบบ";
                 document.getElementById('navAdmin').onclick = () => location.reload();
-
                 showView('memberView');
-
-                showToast("SYSTEM ACCESS GRANTED");
-
+                showToast("ยินดีต้อนรับเข้าสู่ระบบจัดการ");
             } else {
-
-                showToast("INVALID ACCESS KEY");
-
+                showToast("รหัสผ่านไม่ถูกต้อง");
             }
-
         }
-
-
 
         function showView(v) {
-
             document.getElementById('memberView').classList.toggle('hidden', v !== 'memberView');
-
             document.getElementById('adminLoginView').classList.toggle('hidden', v !== 'adminLoginView');
-
         }
-
-
-
-        // --- UI Customization ---
-
-        function changeTheme(t) {
-
-            document.getElementById('mainBody').className = (t === 'default') ? '' : 'theme-' + t;
-
-            db.ref('settings/theme').set(t);
-
-        }
-
-
-
-        function changeColor(c) {
-
-            document.documentElement.style.setProperty('--primary', c);
-
-            db.ref('settings/primaryColor').set(c);
-
-        }
-
-
-
-        function updateBrand(v) {
-
-            document.getElementById('brand-name').innerText = v;
-
-            db.ref('settings/brandName').set(v);
-
-        }
-
-
-
-        function updateHeaders() {
-
-            const h = {
-
-                founder: document.getElementById('headFounder').value || "FOUNDERS",
-
-                leader: document.getElementById('headLeader').value || "LEADERS",
-
-                member: document.getElementById('headMember').value || "MEMBERS"
-
-            };
-
-            db.ref('settings/headers').set(h);
-
-        }
-
-
 
         // --- Database Listeners ---
-
-        db.ref('settings').on('value', snap => {
-
-            const s = snap.val() || {};
-
-            if(s.theme) { document.getElementById('mainBody').className = s.theme === 'default' ? '' : 'theme-' + s.theme; document.getElementById('themeSelect').value = s.theme; }
-
-            if(s.primaryColor) { document.documentElement.style.setProperty('--primary', s.primaryColor); document.getElementById('colorPicker').value = s.primaryColor; }
-
-            if(s.brandName) { document.getElementById('brand-name').innerText = s.brandName; document.getElementById('editBrand').value = s.brandName; }
-
-            if(s.headers) {
-
-                document.getElementById('titleFounder').innerText = s.headers.founder;
-
-                document.getElementById('titleLeader').innerText = s.headers.leader;
-
-                document.getElementById('titleMember').innerText = s.headers.member;
-
-                document.getElementById('headFounder').value = s.headers.founder;
-
-                document.getElementById('headLeader').value = s.headers.leader;
-
-                document.getElementById('headMember').value = s.headers.member;
-
-            }
-
-        });
-
-
-
         db.ref('roster').on('value', snap => {
-
             const grids = { founder: document.getElementById('founderGrid'), leader: document.getElementById('leaderGrid'), member: document.getElementById('memberGrid') };
-
             Object.values(grids).forEach(g => g.innerHTML = "");
-
             const data = snap.val();
-
             if(!data) return;
 
-
-
             Object.keys(data).forEach(id => {
-
                 const item = data[id];
-
                 const card = document.createElement('div');
-
                 card.className = 'member-card';
-
                 card.innerHTML = `
-
-                    <div class="avatar-box" style="background-image: url('${item.img}')"></div>
-
+                    <div class="avatar-box" style="background-image: url('${item.img || ''}')"></div>
                     <div style="flex:1">
-
                         <span class="role-tag">${item.role.toUpperCase()}</span>
-
                         <div class="name" style="font-weight:900; font-family:'Orbitron'; font-size:1.1rem;">${item.name}</div>
-
                         <a href="${item.fb}" target="_blank" style="font-size:0.7rem; color:var(--primary); text-decoration:none;">FACEBOOK</a>
-
                     </div>
-
                     ${isAdmin ? `
-
                         <div style="display:flex; flex-direction:column; gap:5px;">
-
                             <button onclick="editMember('${id}', ${JSON.stringify(item).replace(/"/g, '&quot;')})" style="background:none; border:none; color:#aaa; cursor:pointer;"><i class="fas fa-edit"></i></button>
-
-                            <button onclick="deleteMember('${id}')" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fas fa-trash"></i></button>
-
+                            <button onclick="askDeleteMember('${id}')" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fas fa-trash"></i></button>
                         </div>
-
                     ` : ''}
-
                 `;
-
                 if(grids[item.role]) grids[item.role].appendChild(card);
-
             });
-
         });
 
-
-
-        // --- Member Actions ---
-
+        // --- การจัดการสมาชิก ---
         function saveMember() {
-
             const id = document.getElementById('editMemberId').value;
-
             const data = {
-
                 name: document.getElementById('newName').value,
-
                 img: document.getElementById('newImg').value,
-
                 fb: document.getElementById('newFB').value,
-
                 role: document.getElementById('newRole').value
-
             };
-
-            if(!data.name) return showToast("PLEASE ENTER NAME");
-
+            if(!data.name) return showToast("กรุณากรอกชื่อสมาชิก");
             
-
-            if(id) db.ref('roster/' + id).update(data);
-
-            else db.ref('roster').push(data);
-
-            
-
-            resetForm();
-
-            showToast("DATA SAVED");
-
+            const actionText = id ? "อัปเดตข้อมูล" : "เพิ่มข้อมูล";
+            openUIModal("ยืนยันการบันทึก", `ต้องการ ${actionText} ของคุณ ${data.name} ใช่หรือไม่?`, () => {
+                if(id) db.ref('roster/' + id).update(data);
+                else db.ref('roster').push(data);
+                resetForm();
+                showToast("บันทึกข้อมูลเรียบร้อยแล้ว");
+            });
         }
-
-
 
         function editMember(id, data) {
-
             document.getElementById('editMemberId').value = id;
-
             document.getElementById('newName').value = data.name;
-
             document.getElementById('newImg').value = data.img;
-
             document.getElementById('newFB').value = data.fb;
-
             document.getElementById('newRole').value = data.role;
-
-            document.getElementById('saveBtn').innerText = "UPDATE OPERATIVE";
-
+            document.getElementById('saveBtn').innerText = "แก้ไขข้อมูลสมาชิก";
             window.scrollTo({ top: 0, behavior: 'smooth' });
-
+            showToast("แก้ไขข้อมูล: " + data.name);
         }
 
-
-
-        function deleteMember(id) {
-
-            if(confirm("DELETE THIS MEMBER?")) {
-
+        function askDeleteMember(id) {
+            openUIModal("ยืนยันการลบ", "คุณแน่ใจหรือไม่ที่จะลบรายชื่อสมาชิกนี้ออกจากระบบ?", () => {
                 db.ref('roster/' + id).remove();
-
-                showToast("MEMBER REMOVED");
-
-            }
-
+                showToast("ลบรายชื่อเรียบร้อยแล้ว");
+            });
         }
-
-
 
         function resetForm() {
-
             document.getElementById('editMemberId').value = "";
-
             ['newName','newImg','newFB'].forEach(i => document.getElementById(i).value = "");
-
-            document.getElementById('saveBtn').innerText = "SAVE OPERATIVE";
-
+            document.getElementById('saveBtn').innerText = "บันทึกข้อมูล";
         }
-
     </script>
-
 </body>
-
 </html>
