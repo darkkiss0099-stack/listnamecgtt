@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONELESS CGT</title>
+    <title>ONELESS CGT | CONTROL PANEL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Kanit:wght@200;400;900&display=swap" rel="stylesheet">
     
@@ -43,16 +43,19 @@
         }
         #brand-name { font-weight: 900; letter-spacing: 5px; font-family: 'Orbitron'; font-size: 1.6rem; color: var(--primary); }
 
-        /* --- Admin Panel (Thai UI) --- */
+        /* --- Admin Panel --- */
         .admin-form-box { background: rgba(255,255,255,0.03); border: 1px dashed var(--primary); padding: 25px; border-radius: 15px; margin-bottom: 30px; }
         .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .config-grid { border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px; }
+        
         input, select { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 12px; color: #fff; border-radius: 8px; font-family: 'Kanit'; outline: none; }
         input:focus { border-color: var(--primary); }
+        label { font-size: 0.75rem; color: var(--primary); font-family: 'Kanit'; display: block; margin-bottom: 5px; }
         
         .btn-action { background: var(--primary); color: #000; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; }
         .btn-action:hover { transform: scale(1.05); opacity: 0.9; }
 
-        /* --- Section Styling (English View) --- */
+        /* --- Section Styling --- */
         .section-title { 
             font-family: 'Orbitron'; font-size: 1.2rem; font-weight: 900; 
             letter-spacing: 8px; color: #fff; margin: 60px 0 25px; 
@@ -68,17 +71,15 @@
             overflow: hidden;
         }
         .member-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        
+        /* แอดมินคลิกการ์ดสมาชิกเพื่อแก้ไข */
+        body.admin-mode .member-card { cursor: cell; }
+        body.admin-mode .member-card:hover { background: rgba(255, 255, 255, 0.05); }
 
-        /* กรอบรูปโปรไฟล์ (ไม่ทะลุ) */
         .avatar-box { 
-            width: 70px; 
-            height: 70px; 
-            background-size: cover; 
-            background-position: center;
-            background-repeat: no-repeat;
-            border-radius: 10px; 
-            border: 2px solid var(--border-color);
-            flex-shrink: 0;
+            width: 70px; height: 70px; background-size: cover; 
+            background-position: center; border-radius: 10px; 
+            border: 2px solid var(--border-color); flex-shrink: 0;
         }
 
         .role-tag { font-family: 'Orbitron'; font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; padding: 3px 8px; border-radius: 4px; background: rgba(255,255,255,0.1); margin-bottom: 5px; display: inline-block; }
@@ -86,7 +87,7 @@
         .hidden { display: none !important; }
         .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 12px 30px; border-radius: 50px; font-weight: 900; z-index: 1000; font-family: 'Kanit'; font-size: 0.85rem; }
 
-        /* Custom UI Confirm Modal */
+        /* Modal */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.85);
             display: none; align-items: center; justify-content: center;
@@ -132,23 +133,50 @@
             
             <div id="adminPanel" class="hidden">
                 <div class="admin-form-box">
-                    <h3 style="font-family: 'Kanit'; color: var(--primary); margin-top: 0;">🛠️ จัดการรายชื่อสมาชิก</h3>
+                    <h3 style="font-family: 'Kanit'; color: var(--primary); margin-top: 0;">🎨 ปรับแต่งระบบ (System Config)</h3>
+                    <div class="admin-grid config-grid">
+                        <div>
+                            <label>สีหลักของเว็บไซต์ (Primary Color)</label>
+                            <input type="color" id="configColor" oninput="applyColor(this.value)" style="width:100%; height:45px; padding:2px;">
+                        </div>
+                        <div>
+                            <label>รูปพื้นหลังเว็บไซต์ (Background URL)</label>
+                            <input type="text" id="configBG" placeholder="https://..." onkeyup="applyBG(this.value)">
+                        </div>
+                        <div>
+                            <label>หัวข้อ Founder</label>
+                            <input type="text" id="configHeadFounder" placeholder="FOUNDERS" onkeyup="applyHeaders()">
+                        </div>
+                        <div>
+                            <label>หัวข้อ Leader</label>
+                            <input type="text" id="configHeadLeader" placeholder="LEADERS" onkeyup="applyHeaders()">
+                        </div>
+                        <div>
+                            <label>หัวข้อ Member</label>
+                            <input type="text" id="configHeadMember" placeholder="MEMBERS" onkeyup="applyHeaders()">
+                        </div>
+                    </div>
+                    <button onclick="saveGlobalConfig()" class="btn-action" style="width:100%">บันทึกการตั้งค่าระบบทั้งหมด</button>
+                </div>
+
+                <div class="admin-form-box">
+                    <h3 style="font-family: 'Kanit'; color: var(--primary); margin-top: 0;">👤 จัดการรายชื่อสมาชิก</h3>
                     <div class="admin-grid">
                         <input type="hidden" id="editMemberId">
                         <div>
-                            <label style="font-size: 0.7rem; color: var(--primary);">ชื่อ-นามสกุล</label>
+                            <label>ชื่อ-นามสกุล</label>
                             <input type="text" id="newName" placeholder="ระบุชื่อ..." style="width:100%">
                         </div>
                         <div>
-                            <label style="font-size: 0.7rem; color: var(--primary);">ลิงก์รูปภาพโปรไฟล์</label>
+                            <label>ลิงก์รูปภาพโปรไฟล์</label>
                             <input type="text" id="newImg" placeholder="https://..." style="width:100%">
                         </div>
                         <div>
-                            <label style="font-size: 0.7rem; color: var(--primary);">ลิงก์ Facebook</label>
+                            <label>ลิงก์ Facebook</label>
                             <input type="text" id="newFB" placeholder="Facebook URL" style="width:100%">
                         </div>
                         <div>
-                            <label style="font-size: 0.7rem; color: var(--primary);">ตำแหน่ง</label>
+                            <label>ตำแหน่ง</label>
                             <select id="newRole" style="width:100%">
                                 <option value="founder">ผู้ก่อตั้ง (Founder)</option>
                                 <option value="leader">หัวหน้า (Leader)</option>
@@ -156,7 +184,7 @@
                             </select>
                         </div>
                     </div>
-                    <button onclick="saveMember()" id="saveBtn" class="btn-action">บันทึกข้อมูล</button>
+                    <button onclick="saveMember()" id="saveBtn" class="btn-action">บันทึกข้อมูลสมาชิก</button>
                     <button onclick="resetForm()" class="btn-action" style="background:#444; color:#fff;">ล้างค่า</button>
                 </div>
             </div>
@@ -185,15 +213,12 @@
 
         let isAdmin = false;
 
-        // Custom UI Modal Logic
+        // Modal Logic
         function openUIModal(title, desc, onConfirm) {
             document.getElementById('uiModalTitle').innerText = title;
             document.getElementById('uiModalDesc').innerText = desc;
             document.getElementById('uiModal').style.display = 'flex';
-            document.getElementById('uiModalConfirm').onclick = () => {
-                onConfirm();
-                closeUIModal();
-            };
+            document.getElementById('uiModalConfirm').onclick = () => { onConfirm(); closeUIModal(); };
         }
         function closeUIModal() { document.getElementById('uiModal').style.display = 'none'; }
 
@@ -202,17 +227,25 @@
             document.body.appendChild(t); setTimeout(() => t.remove(), 2500);
         }
 
+        // Live Preview Config
+        function applyColor(c) { document.documentElement.style.setProperty('--primary', c); }
+        function applyBG(url) { document.body.style.backgroundImage = url ? `url('${url}')` : ''; }
+        function applyHeaders() {
+            document.getElementById('titleFounder').innerText = document.getElementById('configHeadFounder').value || "FOUNDERS";
+            document.getElementById('titleLeader').innerText = document.getElementById('configHeadLeader').value || "LEADERS";
+            document.getElementById('titleMember').innerText = document.getElementById('configHeadMember').value || "MEMBERS";
+        }
+
         function handleLogin() {
             if(document.getElementById('loginPass').value === "0808") {
                 isAdmin = true;
+                document.body.classList.add('admin-mode');
                 document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('navAdmin').innerText = "LOGOUT";
                 document.getElementById('navAdmin').onclick = () => location.reload();
                 showView('memberView');
-                showToast("เข้าสู่ระบบสำเร็จ");
-            } else {
-                showToast("รหัสผ่านไม่ถูกต้อง");
-            }
+                showToast("ยินดีต้อนรับแอดมิน");
+            } else { showToast("รหัสผ่านไม่ถูกต้อง"); }
         }
 
         function showView(v) {
@@ -220,7 +253,32 @@
             document.getElementById('adminLoginView').classList.toggle('hidden', v !== 'adminLoginView');
         }
 
-        // Database Listeners
+        // Database: Global Config
+        db.ref('settings').on('value', snap => {
+            const s = snap.val() || {};
+            if(s.primary) applyColor(s.primary);
+            if(s.bg) applyBG(s.bg);
+            document.getElementById('configColor').value = s.primary || "#f3d48b";
+            document.getElementById('configBG').value = s.bg || "";
+            document.getElementById('configHeadFounder').value = s.headFounder || "FOUNDERS";
+            document.getElementById('configHeadLeader').value = s.headLeader || "LEADERS";
+            document.getElementById('configHeadMember').value = s.headMember || "MEMBERS";
+            applyHeaders();
+        });
+
+        function saveGlobalConfig() {
+            const data = {
+                primary: document.getElementById('configColor').value,
+                bg: document.getElementById('configBG').value,
+                headFounder: document.getElementById('configHeadFounder').value,
+                headLeader: document.getElementById('configHeadLeader').value,
+                headMember: document.getElementById('configHeadMember').value
+            };
+            db.ref('settings').update(data);
+            showToast("บันทึกการตั้งค่าระบบแล้ว");
+        }
+
+        // Database: Members
         db.ref('roster').on('value', snap => {
             const grids = { founder: document.getElementById('founderGrid'), leader: document.getElementById('leaderGrid'), member: document.getElementById('memberGrid') };
             Object.values(grids).forEach(g => g.innerHTML = "");
@@ -231,25 +289,24 @@
                 const item = data[id];
                 const card = document.createElement('div');
                 card.className = 'member-card';
+                // เมื่อเป็นแอดมิน คลิกที่ตัวการ์ดเพื่อแก้ไข
+                card.onclick = () => { if(isAdmin) editMember(id, item); };
+                
                 card.innerHTML = `
                     <div class="avatar-box" style="background-image: url('${item.img || ''}')"></div>
                     <div style="flex:1">
                         <span class="role-tag">${item.role.toUpperCase()}</span>
                         <div class="name" style="font-weight:900; font-family:'Orbitron'; font-size:1.1rem;">${item.name}</div>
-                        <a href="${item.fb}" target="_blank" style="font-size:0.7rem; color:var(--primary); text-decoration:none;">FACEBOOK</a>
+                        <a href="${item.fb}" target="_blank" onclick="event.stopPropagation()" style="font-size:0.7rem; color:var(--primary); text-decoration:none;">FACEBOOK</a>
                     </div>
                     ${isAdmin ? `
-                        <div style="display:flex; flex-direction:column; gap:5px;">
-                            <button onclick="editMember('${id}', ${JSON.stringify(item).replace(/"/g, '&quot;')})" style="background:none; border:none; color:#aaa; cursor:pointer;"><i class="fas fa-edit"></i></button>
-                            <button onclick="askDeleteMember('${id}')" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fas fa-trash"></i></button>
-                        </div>
+                        <button onclick="event.stopPropagation(); askDeleteMember('${id}')" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fas fa-trash"></i></button>
                     ` : ''}
                 `;
                 if(grids[item.role]) grids[item.role].appendChild(card);
             });
         });
 
-        // Admin Actions
         function saveMember() {
             const id = document.getElementById('editMemberId').value;
             const data = {
@@ -258,13 +315,13 @@
                 fb: document.getElementById('newFB').value,
                 role: document.getElementById('newRole').value
             };
-            if(!data.name) return showToast("กรุณากรอกชื่อสมาชิก");
+            if(!data.name) return showToast("กรุณากรอกชื่อ");
             
-            openUIModal("ยืนยันการบันทึก", `คุณต้องการบันทึกข้อมูลของ ${data.name} ใช่หรือไม่?`, () => {
+            openUIModal("ยืนยันการบันทึก", `ต้องการบันทึกข้อมูลคุณ ${data.name}?`, () => {
                 if(id) db.ref('roster/' + id).update(data);
                 else db.ref('roster').push(data);
                 resetForm();
-                showToast("บันทึกสำเร็จ");
+                showToast("บันทึกเรียบร้อย");
             });
         }
 
@@ -274,15 +331,15 @@
             document.getElementById('newImg').value = data.img;
             document.getElementById('newFB').value = data.fb;
             document.getElementById('newRole').value = data.role;
-            document.getElementById('saveBtn').innerText = "แก้ไขข้อมูลสมาชิก";
+            document.getElementById('saveBtn').innerText = "อัปเดตสมาชิก";
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            showToast("กำลังแก้ไขข้อมูลคุณ " + data.name);
+            showToast("แก้ไข: " + data.name);
         }
 
         function askDeleteMember(id) {
-            openUIModal("ยืนยันการลบ", "ข้อมูลสมาชิกนี้จะหายไปจากระบบถาวร คุณแน่ใจหรือไม่?", () => {
+            openUIModal("ยืนยันการลบ", "ลบสมาชิกนี้ถาวร?", () => {
                 db.ref('roster/' + id).remove();
-                showToast("ลบข้อมูลเรียบร้อยแล้ว");
+                showToast("ลบสำเร็จ");
             });
         }
 
